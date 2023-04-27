@@ -1,16 +1,18 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "LoL Stream Opener",
   "version": "1.1.0",
   "background": {
-    "service_worker": "background.js"
+    "scripts": ["background.js"],
+    "persistent": true
   },
-  "permissions": ["activeTab", "scripting", "storage"],
-  "host_permissions": [
+  "permissions": [
+    "tabs",
+    "storage",
     "https://leaguedrops.onrender.com/*",
     "https://lolesports.com/*"
   ],
-  "action": {
+  "browser_action": {
     "default_popup": "popup.html"
   }
 }
