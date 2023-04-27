@@ -29,10 +29,11 @@ function showUpcomingMatches(data) {
   matches.forEach(match => {
     const start = new Date(match.startTime);
     const matchItem = document.createElement('li');
-    matchItem.innerHTML = `<span class="league">${match.league.name}</span> - <span class="time">${start.toLocaleString()}</span>`;
+    matchItem.innerHTML = `<span class="league">${match.league.name}</span> - <span class="date">${start.toLocaleDateString()}</span> - <span class="time">${start.toLocaleTimeString()}</span>`;
     matchesList.appendChild(matchItem);
   });
 }
+
 
 async function getCachedSchedule() {
   return new Promise(resolve => {
