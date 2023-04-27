@@ -107,5 +107,5 @@ chrome.runtime.onInstalled.addListener(function() {
   fetchSchedule();
 });
 
-// Check every 5 minutes
-setInterval(fetchSchedule, 25000);
+
+setInterval(fetchSchedule, 180000);
