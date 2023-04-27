@@ -69,13 +69,22 @@ function checkSchedule(data) {
 
   chrome.tabs.query({}, async function (queryResults) {
     const leagueTabs = {};
-
+  
     for (const tab of queryResults) {
       const leagueUrl = LEAGUE_MAP[tab.url];
       if (leagueUrl) {
         leagueTabs[leagueUrl] = tab.id;
       }
     }
+  
+    chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
+      for (const [leagueUrl, storedTabId] of Object.entries(leagueTabs)) {
+        if (storedTabId === tabId) {
+          delete leagueTabs[leagueUrl];
+          console.log(`Removed closed tab with league URL: ${leagueUrl}`);
+        }
+      }
+    });
 
     for (const event of events) {
       if (event.state === "completed" && leagueTabs[event.league.url]) {
