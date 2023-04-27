@@ -20,4 +20,4 @@ This extension is not affiliated with Riot Games or any of its partners. Use it 
 
 
 ## Constributing 
-Feel free to open a pull request if you can help, I have no clue about javascript or chrome extensions so I made this pretty fast so there might be some bugs.
+Feel free to open a pull request if you can help, I have no clue about javascript or chrome extensions so I made this pretty fast so there might be some bugs and shitty code.
