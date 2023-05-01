@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "LoL Stream Opener",
+  "version": "1.2.0",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "permissions": [
+    "tabs",
+    "storage",
+    "https://leaguewatcher.onrender.com/*",
+    "https://lolesports.com/*"
+  ],
+  "browser_action": {
+    "default_popup": "popup.html"
+  }
+}
