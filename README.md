@@ -11,10 +11,9 @@ This is a Chrome extension that automatically opens games on lolesports.com in a
 4. Click on "Load unpacked" and select the folder where you cloned or downloaded the repository
 
 # Usage
-The extension will automatically check for upcoming matches every 5 minutes and open a new tab with the stream if it is about to start. If a match has already finished, the extension will close the tab with the stream.
+The extension will automatically check for upcoming matches every 5 minutes and open a new window if it is about to start. When the match finishes, the extension will close the window.
 Click on the extension icon in the top right corner of Chrome to see the list of upcoming matches.
 
-**By default the windows are unmuted, if you would like to mute them, you can enable the option. The changes will take effect when the windows are opened again.**
 
 ## Constributing 
 Feel free to open a pull request if you can help, I have no clue about javascript or chrome extensions so I made this pretty fast so there might be some bugs and shitty code.
