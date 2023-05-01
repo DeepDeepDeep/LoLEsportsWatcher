@@ -15,6 +15,7 @@ The extension will automatically check for upcoming matches every 5 minutes and 
 Click on the extension icon in the top right corner of Chrome to see the list of upcoming matches.
 
 It's a good idea to this also:
+
 ![image](https://user-images.githubusercontent.com/54153890/235549499-8a3fc579-006d-4006-bde0-4fad08c6b265.png)
 
 
