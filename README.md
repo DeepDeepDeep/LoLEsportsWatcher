@@ -1,7 +1,7 @@
 # There might be bugs, I haven't been able to test it extensively. 
 
 # League Esports Watcher Chrome Extension
-This is a Chrome extension that automatically opens games on lolesports.com in a new tab. This is helpful if you don't want to miss games.
+This is a Chrome extension that automatically opens games on lolesports.com in a new window. This is helpful if you don't want to miss games.
 
 ## Installation
 
