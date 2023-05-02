@@ -2,7 +2,7 @@ const API_URL = 'https://leaguewatcher.onrender.com/schedule';
 
 const LEAGUE_MAP = {
   'EMEA Masters': 'https://lolesports.com/live/emea_masters/emeamasters',
-  'MSI' : 'https://lolesports.com/live/msi',
+  'MSI' : 'https://lolesports.com/live/msi/riotgames',
   'LCS': 'https://lolesports.com/live/lcs',
   'LCS Challengers': 'https://lolesports.com/live/north_american_challenger_league',
   'LCS Challengers Qualifiers': 'https://lolesports.com/live/lcs_challengers_qualifiers',
