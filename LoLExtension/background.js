@@ -1,5 +1,4 @@
 const API_URL = 'https://leaguewatcher.onrender.com/schedule';
-
 const LEAGUE_MAP = {
   'EMEA Masters': 'https://lolesports.com/live/emea_masters/emeamasters',
   'MSI' : 'https://lolesports.com/live/msi/riotgames',
@@ -48,6 +47,10 @@ const LEAGUE_MAP = {
   'Master Flow League': ''
 }
 
+const MATCH_WINDOW_TIMEOUT = 600 * 1000; // 10 minutes
+const SCHEDULE_POLL_INTERVAL = 300 * 1000; // 5 minutes
+
+
 async function fetchSchedule() {
   try {
     const response = await fetch(API_URL);
@@ -75,25 +78,34 @@ async function checkSchedule(data) {
     const matchLeagueURL = LEAGUE_MAP[event.league.name];
     const timeUntilMatch = new Date(event.startTime) - now;
     const leagueName = event.league.name;
-    if (event?.state === 'unstarted' || event?.state === 'inProgress' && event.type === 'match') {
-      if (timeUntilMatch <= 600 * 1000) {
-        if (getByValue(matchWindowMap, event?.match?.id)) {
-          console.log(`Match ${leagueName} has already been opened`);
-        } else {
-          chrome.windows.create({ url: matchLeagueURL, state: "maximized"}, function(windows) {
-            matchWindowMap.set(windows.id, event?.match?.id);
-          });
-        }
+    const matchID = event?.match?.id;
+
+    if (event?.state === 'unstarted' || event?.state === 'inProgress' && event?.type === 'match') {
+      if (timeUntilMatch <= MATCH_WINDOW_TIMEOUT && !getByValue(matchWindowMap, matchID)) {
+        console.log(`Opening window for ${leagueName} match`);
+        chrome.windows.create({ url: matchLeagueURL, state: "maximized"}, function(windows) {
+          matchWindowMap.set(windows.id, matchID);
+          console.log(`Window ${windows.id} opened for match ${matchID}`);
+        });
       }
-    } else if (event?.state === 'completed' && getByValue(matchWindowMap, event?.match?.id)) {
+    } else if (event?.state === 'completed' && getByValue(matchWindowMap, matchID)) {
       console.log(`Match ${event.league.name} has completed.`);
-      const windowID = getByValue(matchWindowMap, event?.match?.id);
+      const windowID = getByValue(matchWindowMap, matchID);
       chrome.windows.remove(windowID);
       console.log(`Closed window ${windowID}`);
       matchWindowMap.delete(windowID);
       }
     }
   }
+
+
+function getByValue(map, target) {
+  for (let [key, value] of map.entries()) {
+    if (value === target)
+        return key;
+  }
+}
+
 
 chrome.windows.onRemoved.addListener((windowId) => {
   if (matchWindowMap.has(windowId)) {
@@ -103,16 +115,9 @@ chrome.windows.onRemoved.addListener((windowId) => {
 });
 
 
-function getByValue(map, target) {
-  for (let [key, value] of map.entries()) {
-    if (value === target)
-      return key;
-  }
-}
-
 chrome.runtime.onInstalled.addListener(function() {
   fetchSchedule();
 });
 
 
-setInterval(fetchSchedule, 300 * 1000);
+setInterval(fetchSchedule, SCHEDULE_POLL_INTERVAL);
