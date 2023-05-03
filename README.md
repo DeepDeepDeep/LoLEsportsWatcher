@@ -12,7 +12,7 @@ The extension will automatically open a new window when a match is about to begi
 The extension periodically checks for new matches every five minutes and automatically opens a new window when a match is about to begin in less than 10 minutes. Once the match is over, the extension will close the window. 
 
 
-If you have the Memory Saver (Chrome/Edge/Firefox...etc)feature enabled, add lolesports.com to the exclusion: 
+If you have the Memory Saver feature enabled, add lolesports.com to the exclusion: 
 
 ![image](https://user-images.githubusercontent.com/54153890/235549499-8a3fc579-006d-4006-bde0-4fad08c6b265.png)
 
