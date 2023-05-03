@@ -85,7 +85,7 @@ async function checkSchedule(data) {
           });
         }
       }
-    } else if (event?.match?.state === 'completed' && getByValue(matchWindowMap, event?.match?.id)) {
+    } else if (event?.state === 'completed' && getByValue(matchWindowMap, event?.match?.id)) {
       console.log(`Match ${event.league.name} has completed.`);
       const windowID = getByValue(matchWindowMap, event?.match?.id);
       chrome.windows.remove(windowID);

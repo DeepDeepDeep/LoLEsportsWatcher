@@ -2,6 +2,7 @@
   "manifest_version": 2,
   "name": "LoL Stream Opener",
   "version": "1.2.0",
+  "description": "Automatically opens games on lolesports.com in a new window.",
   "background": {
     "scripts": ["background.js"],
     "persistent": true
