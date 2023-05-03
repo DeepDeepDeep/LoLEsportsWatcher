@@ -1,5 +1,3 @@
-# There might be bugs, I haven't been able to test it extensively. 
-
 # LoL Esports Watcher Chrome Extension
 The extension will automatically open a new window when a match is about to begin, and then close the window when the match has ended. 
 
