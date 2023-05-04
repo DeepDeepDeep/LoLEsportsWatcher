@@ -83,10 +83,15 @@ async function checkSchedule(data) {
     if (event?.state === 'unstarted' || event?.state === 'inProgress' && event?.type === 'match') {
       if (timeUntilMatch <= MATCH_WINDOW_TIMEOUT && !getByValue(matchWindowMap, matchID)) {
         console.log(`Opening window for ${leagueName} match`);
-        chrome.windows.create({ url: matchLeagueURL, state: "maximized"}, function(windows) {
-          matchWindowMap.set(windows.id, matchID);
-          console.log(`Window ${windows.id} opened for match ${matchID}`);
+        chrome.storage.local.get('windowState', (result) => {
+          const windowState = result.windowState || 'normal';
+        
+          chrome.windows.create({ url: matchLeagueURL, state: windowState }, function(windows) {
+            matchWindowMap.set(windows.id, matchID);
+            console.log(`Window ${windows.id} opened for match ${matchID}`);
+          });
         });
+        
       }
     } else if (event?.state === 'completed' && getByValue(matchWindowMap, matchID)) {
       console.log(`Match ${event.league.name} has completed.`);
