@@ -83,8 +83,7 @@ async function checkSchedule(data) {
     if (event?.state === 'unstarted' || event?.state === 'inProgress' && event?.type === 'match') {
       if (timeUntilMatch <= MATCH_WINDOW_TIMEOUT && !getByValue(matchWindowMap, matchID)) {
         console.log(`Opening window for ${leagueName} match`);
-        const windowStateDropdown = document.getElementById('window-state');
-        chrome.windows.create({ url: matchLeagueURL, state: windowStateDropdown.value}, function(windows) {
+        chrome.windows.create({ url: matchLeagueURL, state: "maximized"}, function(windows) {
           matchWindowMap.set(windows.id, matchID);
           console.log(`Window ${windows.id} opened for match ${matchID}`);
         });
