@@ -2,66 +2,54 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title>Upcoming LoL Matches</title>
+		<title>LoL Watcher</title>
 		<style>
 			body {
 				font-family: Arial, sans-serif;
 				margin: 0;
 				padding: 0;
-				background-color: #f8f8f8;
-				width: 300px;
-				height: 400px;
+				background-color: #ffffff;
+				width: 200px;
+				height: 120px;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
+				justify-content: center;
 			}
 
 			h1 {
-				font-size: 20px;
+				font-size: 18px;
 				margin-top: 10px;
-				margin-bottom: 20px;
+				margin-bottom: 10px;
 				color: #3b3b3b;
 			}
 
-			ul {
-				list-style: none;
-				margin: 0;
-				padding: 0;
-				overflow-y: scroll;
-				height: 250px;
+			label {
+				font-size: 14px;
+				margin-top: 10px;
+				margin-bottom: 5px;
+				color: #3b3b3b;
+				text-align: center;
 				width: 100%;
 			}
 
-			li {
+			select {
 				font-size: 14px;
-				padding: 10px;
-				background-color: #fff;
+				padding: 5px;
+				width: 100%;
 				margin-bottom: 10px;
-				box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
-				border-left: 4px solid #3b3b3b;
-			}
-
-			.league {
-				font-weight: bold;
-				color: #3b3b3b;
-			}
-
-			.time {
-				font-weight: normal;
-				color: #a1a1a1;
-			}
-
-			.date {
-				font-size: 14px;
-				margin-top: 20px;
-				color: #a1a1a1;
+				box-sizing: border-box;
 			}
 		</style>
 	</head>
 	<body>
-		<h1>Upcoming LoL Matches</h1>
-		<ul id="matches"></ul>
-		<p id="date"></p>
+		<h1>LoL Watcher</h1>
+		<label for="state">Window State:</label>
+		<select id="state">
+			<option value="normal">Normal</option>
+			<option value="minimized">Minimized</option>
+			<option value="maximized">Maximized</option>
+		</select>
 		<script src="popup.js"></script>
 	</body>
 </html>
