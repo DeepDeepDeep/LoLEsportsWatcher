@@ -94,7 +94,7 @@ async function checkSchedule(data) {
         
       }
     } else if (event?.state === 'completed' && getByValue(matchWindowMap, matchID)) {
-      console.log(`Match ${event.league.name} has completed.`);
+      console.log(`Match ${event.league.name} has completed, matchID: ${matchID}`);
       const windowID = getByValue(matchWindowMap, matchID);
       chrome.windows.remove(windowID);
       console.log(`Closed window ${windowID}`);
