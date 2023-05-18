@@ -79,7 +79,7 @@ async function checkSchedule(data) {
     const timeUntilMatch = new Date(event.startTime) - now;
     const leagueName = event.league.name;
     const matchID = event?.match?.id;
-
+    const timeNow = new Date();
     if (event?.state === 'unstarted' || event?.state === 'inProgress' && event?.type === 'match') {
       if (timeUntilMatch <= MATCH_WINDOW_TIMEOUT && !getByValue(matchWindowMap, matchID)) {
         console.log(`Opening window for ${leagueName} match`);
@@ -88,16 +88,16 @@ async function checkSchedule(data) {
         
           chrome.windows.create({ url: matchLeagueURL, state: windowState }, function(windows) {
             matchWindowMap.set(windows.id, matchID);
-            console.log(`Window ${windows.id} opened for match ${matchID}`);
+            console.log(`Window ${windows.id} opened for match ${matchID} at ${timeNow}}`);
           });
         });
         
       }
     } else if (event?.state === 'completed' && getByValue(matchWindowMap, matchID)) {
-      console.log(`Match ${event.league.name} has completed, matchID: ${matchID}`);
+      console.log(`Match ${event.league.name} has completed, matchID: ${matchID} at ${timeNow}`);
       const windowID = getByValue(matchWindowMap, matchID);
       chrome.windows.remove(windowID);
-      console.log(`Closed window ${windowID}`);
+      console.log(`Closed window ${windowID} for match ${matchID} at ${timeNow}`);
       matchWindowMap.delete(windowID);
       }
     }
@@ -114,7 +114,7 @@ function getByValue(map, target) {
 
 chrome.windows.onRemoved.addListener((windowId) => {
   if (matchWindowMap.has(windowId)) {
-    console.log(`Window ${windowId} was closed by the user`);
+    console.log(`Window ${windowId} was closed by the user at ${new Date()}`);
     matchWindowMap.delete(windowId);
   }
 });
