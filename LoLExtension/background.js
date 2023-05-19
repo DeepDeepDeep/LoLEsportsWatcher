@@ -25,8 +25,8 @@ const LEAGUE_MAP = {
   'Liga Portuguesa': '',
   'PG Nationals': '',
   'Ultraliga': '',
-  'SuperLiga': '',
-  'Prime League': '',
+  'SuperLiga': 'https://lolesports.com/live/superliga',
+  'Prime League': 'https://lolesports.com/live/primeleague',
   'Hitpoint Masters': '',
   'Esports Balkan League': '',
   'Greek Legends League': '',
@@ -44,7 +44,8 @@ const LEAGUE_MAP = {
   'Honor League': '',
   'TFT Rising Legends': 'https://lolesports.com/live/tft_esports/teamfighttactics',
   'TAL': '',
-  'Master Flow League': ''
+  'Master Flow League': '',
+  'TFT Western LCQ': ''
 }
 
 const MATCH_WINDOW_TIMEOUT = 600 * 1000; // 10 minutes
@@ -72,14 +73,13 @@ async function checkSchedule(data) {
 
   console.log('Checking schedule...');
   const events = data.data.schedule.events;
-  const now = new Date();
+  const timeNow = new Date();
 
   for (const event of events) {
     const matchLeagueURL = LEAGUE_MAP[event.league.name];
-    const timeUntilMatch = new Date(event.startTime) - now;
+    const timeUntilMatch = new Date(event.startTime) - timeNow;
     const leagueName = event.league.name;
     const matchID = event?.match?.id;
-    const timeNow = new Date();
     if (event?.state === 'unstarted' || event?.state === 'inProgress' && event?.type === 'match') {
       if (timeUntilMatch <= MATCH_WINDOW_TIMEOUT && !getByValue(matchWindowMap, matchID)) {
         console.log(`Opening window for ${leagueName} match`);
