@@ -45,7 +45,7 @@ const LEAGUE_MAP = {
   'TFT Rising Legends': 'https://lolesports.com/live/tft_esports/teamfighttactics',
   'TAL': '',
   'Master Flow League': '',
-  'TFT Western LCQ': ''
+  'TFT Western LCQ': 'https://lolesports.com/live/tft_esports/teamfighttactics'
 }
 
 const MATCH_WINDOW_TIMEOUT = 600 * 1000; // 10 minutes
