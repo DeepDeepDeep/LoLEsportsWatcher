@@ -9,7 +9,7 @@ The extension will automatically open a new window when a match is about to begi
 4. Click on "Load unpacked" and select the folder where you cloned or downloaded the repository
 
 # Usage
-The extension periodically checks for new matches every five minutes and automatically opens a new window when a match is about to begin in less than 10 minutes. Once the match is over, the extension will close the window. 
+The extension periodically checks for new matches every five minutes and automatically opens a new window when a match is about to begin in less than 15 minutes. Once the match is over, the extension will close the window. 
 
 ### Popup Option:
 
