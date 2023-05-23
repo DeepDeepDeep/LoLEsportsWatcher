@@ -52,7 +52,7 @@ const LEAGUE_MAP = {
 };
 
 const MATCH_WINDOW = 900 * 1000; // 15 minutes
-const SCHEDULE_POLL_INTERVAL = 30 * 1000; // 5 minutes
+const SCHEDULE_POLL_INTERVAL = 300 * 1000; // 5 minutes
 
 async function fetchSchedule() {
 	try {
@@ -111,8 +111,7 @@ chrome.windows.onRemoved.addListener((windowId) => {
 	for (const [leagueName, leagueWindow] of leagueWindowMap.entries()) {
 		if (leagueWindow.windowID === windowId) {
 			leagueWindowMap.delete(leagueName);
-			console.log(`Window ${windowId} closed`);
-			console.log(leagueWindowMap);
+			console.log(`Window ${windowId} closed by user at ${new Date().toLocaleString()}`);
 			break;
 		}
 	}
