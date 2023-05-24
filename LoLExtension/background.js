@@ -24,7 +24,7 @@ const LEAGUE_MAP = {
 	'Elite Series': '',
 	'Liga Portuguesa': '',
 	'PG Nationals': '',
-	'Ultraliga': '',
+	'Ultraliga': 'https://lolesports.com/live/ultraliga',
 	'SuperLiga': 'https://lolesports.com/live/superliga',
 	'Prime League': 'https://lolesports.com/live/primeleague',
 	'Hitpoint Masters': '',
