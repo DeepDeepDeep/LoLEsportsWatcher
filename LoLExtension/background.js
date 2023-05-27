@@ -88,7 +88,7 @@ async function checkSchedule(data) {
 				if (leagueWindowMap.has(leagueName) && !leagueWindowMap.get(leagueName).matchIDs.includes(matchID)) {
 					leagueWindowMap.get(leagueName).matchIDs.push(matchID);
 				} else if (!leagueWindowMap.has(leagueName)) {
-					console.log(`Opened window for matches in ${leagueName} at ${timeNow}`);
+					console.log('Opening window for matches in', leagueName);
 					await openWindowForLeague(matchLeagueURL, leagueName, matchID, timeNow);
 				}
 			}
@@ -111,7 +111,7 @@ chrome.windows.onRemoved.addListener((windowId) => {
 	for (const [leagueName, leagueWindow] of leagueWindowMap.entries()) {
 		if (leagueWindow.windowID === windowId) {
 			leagueWindowMap.delete(leagueName);
-			console.log(`Window ${windowId} closed by user at ${new Date().toLocaleString()}`);
+			console.log(`Window ${windowId} closed by user for ${leagueName} at ${new Date().toLocaleString()}`);
 			break;
 		}
 	}
@@ -129,7 +129,7 @@ function openWindowForLeague(url, leagueName, matchID, timeNow) {
 		const windowState = await windowStatePromise;
 		chrome.windows.create({ url, state: windowState }, (window) => {
 			leagueWindowMap.set(leagueName, { matchIDs: [matchID], windowID: window.id });
-			console.log(`Window ${window.id} opened for matches in ${leagueName} at ${timeNow}`);
+			console.log(`Opened window for matches in ${leagueName} at ${timeNow}`);
 			resolve();
 		});
 	});
@@ -140,3 +140,23 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 setInterval(fetchSchedule, SCHEDULE_POLL_INTERVAL);
+
+function clearLeagueWindowMap() {
+	console.log('Clearing league window map to remove any stuck matches');
+	leagueWindowMap.clear();
+}
+
+const resetTime = new Date();
+resetTime.setHours(23);
+resetTime.setMinutes(55);
+resetTime.setSeconds(0);
+resetTime.setMilliseconds(0);
+const currentTime = new Date();
+const timeUntilReset = resetTime - currentTime;
+
+if (timeUntilReset < 0) {
+	resetTime.setDate(resetTime.getDate() + 1);
+}
+
+const timeUntilResetMs = resetTime - new Date();
+setTimeout(clearLeagueWindowMap, timeUntilResetMs);
