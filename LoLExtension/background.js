@@ -24,8 +24,8 @@ const LEAGUE_MAP = {
 	'Elite Series': '',
 	'Liga Portuguesa': '',
 	'PG Nationals': '',
-	'Ultraliga': 'https://lolesports.com/live/ultraliga',
-	'SuperLiga': 'https://lolesports.com/live/superliga',
+	'Ultraliga': 'https://lolesports.com/live/ultraliga/polsatgames2',
+	'SuperLiga': 'https://lolesports.com/live/superliga/lvpes',
 	'Prime League': 'https://lolesports.com/live/primeleague',
 	'Hitpoint Masters': '',
 	'Esports Balkan League': '',
@@ -46,7 +46,7 @@ const LEAGUE_MAP = {
 	'TAL': '',
 	'Master Flow League': '',
 	'TFT Western LCQ': 'https://lolesports.com/live/tft_esports/teamfighttactics',
-	'North Regional League': 'https://lolesports.com/live/north_regional_league',
+	'North Regional League': 'https://lolesports.com/live/north_regional_league/lvpnorte',
 	'South Regional League': 'https://lolesports.com/live/south_regional_league',
 	'TFT Monsters Attack!': 'https://lolesports.com/live/tft_esports/teamfighttactics',
 };
@@ -140,23 +140,3 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 setInterval(fetchSchedule, SCHEDULE_POLL_INTERVAL);
-
-function clearLeagueWindowMap() {
-	console.log('Clearing league window map to remove any stuck matches');
-	leagueWindowMap.clear();
-}
-
-const resetTime = new Date();
-resetTime.setHours(23);
-resetTime.setMinutes(55);
-resetTime.setSeconds(0);
-resetTime.setMilliseconds(0);
-const currentTime = new Date();
-const timeUntilReset = resetTime - currentTime;
-
-if (timeUntilReset < 0) {
-	resetTime.setDate(resetTime.getDate() + 1);
-}
-
-const timeUntilResetMs = resetTime - new Date();
-setTimeout(clearLeagueWindowMap, timeUntilResetMs);
