@@ -49,6 +49,7 @@ const LEAGUE_MAP = {
 	'North Regional League': 'https://lolesports.com/live/north_regional_league/lvpnorte',
 	'South Regional League': 'https://lolesports.com/live/south_regional_league',
 	'TFT Monsters Attack!': 'https://lolesports.com/live/tft_esports/teamfighttactics',
+	'La Ligue Fran\u00e7aise': 'https://lolesports.com/live/lfl/otplol_',
 };
 
 const MATCH_WINDOW = 900 * 1000; // 15 minutes
