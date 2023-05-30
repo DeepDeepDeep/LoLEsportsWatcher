@@ -24,8 +24,8 @@ const LEAGUE_MAP = {
 	'Elite Series': '',
 	'Liga Portuguesa': '',
 	'PG Nationals': '',
-	'Ultraliga': 'https://lolesports.com/live/ultraliga',
-	'SuperLiga': 'https://lolesports.com/live/superliga',
+	'Ultraliga': 'https://lolesports.com/live/ultraliga/polsatgames2',
+	'SuperLiga': 'https://lolesports.com/live/superliga/lvpes',
 	'Prime League': 'https://lolesports.com/live/primeleague',
 	'Hitpoint Masters': '',
 	'Esports Balkan League': '',
@@ -46,7 +46,7 @@ const LEAGUE_MAP = {
 	'TAL': '',
 	'Master Flow League': '',
 	'TFT Western LCQ': 'https://lolesports.com/live/tft_esports/teamfighttactics',
-	'North Regional League': 'https://lolesports.com/live/north_regional_league',
+	'North Regional League': 'https://lolesports.com/live/north_regional_league/lvpnorte',
 	'South Regional League': 'https://lolesports.com/live/south_regional_league',
 	'TFT Monsters Attack!': 'https://lolesports.com/live/tft_esports/teamfighttactics',
 };
@@ -88,7 +88,7 @@ async function checkSchedule(data) {
 				if (leagueWindowMap.has(leagueName) && !leagueWindowMap.get(leagueName).matchIDs.includes(matchID)) {
 					leagueWindowMap.get(leagueName).matchIDs.push(matchID);
 				} else if (!leagueWindowMap.has(leagueName)) {
-					console.log(`Opened window for matches in ${leagueName} at ${timeNow}`);
+					console.log('Opening window for matches in', leagueName);
 					await openWindowForLeague(matchLeagueURL, leagueName, matchID, timeNow);
 				}
 			}
@@ -111,7 +111,7 @@ chrome.windows.onRemoved.addListener((windowId) => {
 	for (const [leagueName, leagueWindow] of leagueWindowMap.entries()) {
 		if (leagueWindow.windowID === windowId) {
 			leagueWindowMap.delete(leagueName);
-			console.log(`Window ${windowId} closed by user at ${new Date().toLocaleString()}`);
+			console.log(`Window ${windowId} closed by user for ${leagueName} at ${new Date().toLocaleString()}`);
 			break;
 		}
 	}
@@ -129,7 +129,7 @@ function openWindowForLeague(url, leagueName, matchID, timeNow) {
 		const windowState = await windowStatePromise;
 		chrome.windows.create({ url, state: windowState }, (window) => {
 			leagueWindowMap.set(leagueName, { matchIDs: [matchID], windowID: window.id });
-			console.log(`Window ${window.id} opened for matches in ${leagueName} at ${timeNow}`);
+			console.log(`Opened window for matches in ${leagueName} at ${timeNow}`);
 			resolve();
 		});
 	});
