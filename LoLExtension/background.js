@@ -47,7 +47,7 @@ const LEAGUE_MAP = {
 	'Master Flow League': '',
 	'TFT Western LCQ': 'https://lolesports.com/live/tft_esports/teamfighttactics',
 	'North Regional League': 'https://lolesports.com/live/north_regional_league/lvpnorte',
-	'South Regional League': 'hhttps://lolesports.com/live/south_regional_league/lvpsur',
+	'South Regional League': 'https://lolesports.com/live/south_regional_league/lvpsur',
 	'TFT Monsters Attack!': 'https://lolesports.com/live/tft_esports/teamfighttactics',
 	'La Ligue Fran\u00e7aise': 'https://lolesports.com/live/lfl/otplol_',
 };
