@@ -29,7 +29,7 @@ const LEAGUE_MAP = {
 	'Prime League': 'https://lolesports.com/live/primeleague',
 	'Hitpoint Masters': '',
 	'Esports Balkan League': '',
-	'Greek Legends League': '',
+	'Greek Legends League': 'https://lolesports.com/live/greek_legends',
 	'Arabian League': 'https://lolesports.com/live/arabian_league',
 	'LCK Academy': '',
 	'LJL Academy': 'https://lolesports.com/live/ljl_academy',
