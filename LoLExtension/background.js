@@ -33,7 +33,7 @@ const LEAGUE_MAP = {
 	'Arabian League': 'https://lolesports.com/live/arabian_league',
 	'LCK Academy': '',
 	'LJL Academy': 'https://lolesports.com/live/ljl_academy',
-	'LCK Challengers': 'https://lolesports.com/live/lck_challengers_league',
+	'LCK Challengers': 'https://lolesports.com/live/lck_challengers_league/lckcl',
 	'CBLOL Academy': 'https://lolesports.com/live/cblol_academy',
 	'Liga Master': '',
 	'Golden League': '',
@@ -50,6 +50,7 @@ const LEAGUE_MAP = {
 	'South Regional League': 'https://lolesports.com/live/south_regional_league/lvpsur',
 	'TFT Monsters Attack!': 'https://lolesports.com/live/tft_esports/teamfighttactics',
 	'La Ligue Fran\u00e7aise': 'https://lolesports.com/live/lfl/otplol_',
+	'Liga Portuguesa': 'https://lolesports.com/live/liga_portuguesa/inygontv1'
 };
 
 const MATCH_WINDOW = 900 * 1000; // 15 minutes
