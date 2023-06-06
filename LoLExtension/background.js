@@ -19,17 +19,15 @@ const LEAGUE_MAP = {
 	'VCS': '',
 	'Worlds': 'https://lolesports.com/live/worlds',
 	'All-Star Event': '',
-	'La Ligue Française': '',
-	'NLC': '',
-	'Elite Series': '',
-	'Liga Portuguesa': '',
+	'NLC': 'https://lolesports.com/live/nlc/nlclol',
+	'Elite Series': 'https://lolesports.com/live/elite_series/esportsprimelol',
 	'PG Nationals': '',
 	'Ultraliga': 'https://lolesports.com/live/ultraliga/polsatgames2',
 	'SuperLiga': 'https://lolesports.com/live/superliga/lvpes',
 	'Prime League': 'https://lolesports.com/live/primeleague',
-	'Hitpoint Masters': '',
+	'Hitpoint Masters': 'https://lolesports.com/live/hitpoint_masters/hitpointcz',
 	'Esports Balkan League': '',
-	'Greek Legends League': 'https://lolesports.com/live/greek_legends',
+	'Greek Legends League': 'https://lolesports.com/live/greek_legends/gamersloungegr',
 	'Arabian League': 'https://lolesports.com/live/arabian_league',
 	'LCK Academy': '',
 	'LJL Academy': 'https://lolesports.com/live/ljl_academy',
@@ -50,7 +48,7 @@ const LEAGUE_MAP = {
 	'South Regional League': 'https://lolesports.com/live/south_regional_league/lvpsur',
 	'TFT Monsters Attack!': 'https://lolesports.com/live/tft_esports/teamfighttactics',
 	'La Ligue Fran\u00e7aise': 'https://lolesports.com/live/lfl/otplol_',
-	'Liga Portuguesa': 'https://lolesports.com/live/liga_portuguesa/inygontv1'
+	'Liga Portuguesa': 'https://lolesports.com/live/liga_portuguesa/inygontv1',
 };
 
 const MATCH_WINDOW = 900 * 1000; // 15 minutes
