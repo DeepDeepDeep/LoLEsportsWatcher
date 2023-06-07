@@ -11,10 +11,21 @@ The extension will automatically open a new window when a match is about to begi
 # Usage
 The extension periodically checks for new matches every five minutes and automatically opens a new window when a match is about to begin in less than 15 minutes. Once the match is over, the extension will close the window. 
 
-### Popup Option:
+# Popup Options
 
-Window State: The window state option in the popup allows the user to choose the state of the window that will be opened when a new match is detected. The available options are "Normal", "Minimized", and "Maximized".
+### Window State
+Customize the state of the popup window in the Chrome extension. Choose between "normal", "minimized", or "maximized".
 
+![image](https://github.com/DeepDeepDeep/LoLEsportsWatcher/assets/54153890/9369458a-d3ee-46cc-ac02-014d5dc2847d)
+
+### Exclude Leagues
+Exclude specific leagues from being opened. 
+
+![image](https://github.com/DeepDeepDeep/LoLEsportsWatcher/assets/54153890/7ef1d37d-1e65-48c5-be38-038c6bf7637d)
+
+
+
+# Chrome Memory Saver 
 If you have the Memory Saver feature enabled, add lolesports.com to the exclusion: 
 
 ![image](https://user-images.githubusercontent.com/54153890/235549499-8a3fc579-006d-4006-bde0-4fad08c6b265.png)
