@@ -61,23 +61,31 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				background-color: #007bff;
-				color: #ffffff;
 				font-size: 12px;
 				font-weight: bold;
 				transition: background-color 0.3s ease;
+			}
+
+			.button.on {
+				background-color: #00cc00;
+				color: #ffffff;
+			}
+
+			.button.off {
+				background-color: #ff0000;
+				color: #666666;
 			}
 
 			.button:hover {
 				background-color: #0056b3;
 			}
 
-			.excluded {
-				background-color: #eeeeee;
+			.excluded .button {
+				background-color: #ff0000;
 				color: #666666;
 			}
 
-			.included {
+			.included .button {
 				background-color: #00cc00;
 				color: #ffffff;
 			}
@@ -111,7 +119,9 @@
 			</select>
 		</div>
 		<div class="container">
-			<label class="label"><h2>Exclude Leagues:</h2></label>
+			<label class="label">
+				<h2>Leagues:</h2>
+			</label>
 			<div id="excludeLeagues"></div>
 		</div>
 		<script src="popup.js"></script>
