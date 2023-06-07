@@ -12,7 +12,7 @@ const LEAGUE_MAP = {
 	'LCO': 'https://lolesports.com/live/lco',
 	'LEC': 'https://lolesports.com/live/lec',
 	'LJL': 'https://lolesports.com/live/ljl-japan/ljl',
-	'LLA': 'https://lolesports.com/live/lla',
+	'LLA': 'https://lolesports.com/live/lla/lla',
 	'LPL': 'https://lolesports.com/live/lpl/lpl',
 	'PCS': 'https://lolesports.com/live/pcs/lolpacific',
 	'TCL': '',
@@ -68,7 +68,6 @@ let leagueWindowMap = new Map();
 
 async function checkSchedule(data) {
 	if (!data?.data?.schedule?.events) {
-		console.error('Schedule data is invalid:', data);
 		return;
 	}
 
@@ -82,6 +81,11 @@ async function checkSchedule(data) {
 		const timeUntilMatch = new Date(event.startTime) - date;
 		const leagueName = event.league.name;
 		const matchID = event?.match?.id;
+
+		if (await isLeagueExcluded(leagueName)) {
+			console.log('Skipping', leagueName, 'because it is excluded');
+			continue;
+		}
 
 		if (event?.state === 'unstarted' || (event?.state === 'inProgress' && event?.type === 'match')) {
 			if (timeUntilMatch <= MATCH_WINDOW) {
@@ -131,6 +135,15 @@ function openWindowForLeague(url, leagueName, matchID, timeNow) {
 			leagueWindowMap.set(leagueName, { matchIDs: [matchID], windowID: window.id });
 			console.log(`Opened window for matches in ${leagueName} at ${timeNow}`);
 			resolve();
+		});
+	});
+}
+
+function isLeagueExcluded(leagueName) {
+	return new Promise((resolve) => {
+		chrome.storage.local.get('excludedLeagues', (result) => {
+			const excludedLeagues = result.excludedLeagues || [];
+			resolve(excludedLeagues.includes(leagueName));
 		});
 	});
 }

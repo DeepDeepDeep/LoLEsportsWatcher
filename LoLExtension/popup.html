@@ -5,12 +5,11 @@
 		<title>LoL Watcher</title>
 		<style>
 			body {
-				font-family: Arial, sans-serif;
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 				margin: 0;
 				padding: 0;
-				background-color: #ffffff;
-				width: 200px;
-				height: 120px;
+				background-color: #f2f2f2;
+				width: 300px;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
@@ -18,38 +17,113 @@
 			}
 
 			h1 {
-				font-size: 18px;
+				font-size: 20px;
 				margin-top: 10px;
 				margin-bottom: 10px;
-				color: #3b3b3b;
+				color: #333333;
+				text-align: center;
 			}
 
-			label {
+			h2 {
+				font-size: 16px;
+				color: #666666;
+				margin-top: 10px;
+				margin-bottom: 10px;
+				text-align: center;
+			}
+
+			.container {
+				width: 250px;
+				margin-bottom: 20px;
+			}
+
+			.label {
 				font-size: 14px;
 				margin-top: 10px;
 				margin-bottom: 5px;
-				color: #3b3b3b;
-				text-align: center;
+				color: #666666;
 				width: 100%;
 			}
 
-			select {
-				font-size: 14px;
-				padding: 5px;
+			.button-container {
+				display: flex;
+				align-items: center;
+				margin-top: 10px;
+			}
+
+			.button {
+				width: 50px;
+				height: 25px;
+				border-radius: 12.5px;
+				border: none;
+				cursor: pointer;
+				margin-right: 5px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 12px;
+				font-weight: bold;
+				transition: background-color 0.3s ease;
+			}
+
+			.button.on {
+				background-color: #00cc00;
+				color: #ffffff;
+			}
+
+			.button.off {
+				background-color: #ff0000;
+				color: #666666;
+			}
+
+			.button:hover {
+				background-color: #0056b3;
+			}
+
+			.excluded .button {
+				background-color: #ff0000;
+				color: #666666;
+			}
+
+			.included .button {
+				background-color: #00cc00;
+				color: #ffffff;
+			}
+
+			.select {
 				width: 100%;
-				margin-bottom: 10px;
-				box-sizing: border-box;
+				height: 25px;
+				border-radius: 4px;
+				border: 1px solid #cccccc;
+				background-color: #ffffff;
+				color: #333333;
+				font-size: 12px;
+				padding: 0 5px;
+			}
+
+			.select:focus {
+				outline: none;
+				border-color: #007bff;
+				box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 			}
 		</style>
 	</head>
 	<body>
 		<h1>LoL Watcher</h1>
-		<label for="state">Window State:</label>
-		<select id="state">
-			<option value="normal">Normal</option>
-			<option value="minimized">Minimized</option>
-			<option value="maximized">Maximized</option>
-		</select>
+		<div class="container">
+			<label class="label" for="state">Window State:</label>
+			<select class="select" id="state">
+				<option value="normal">Normal</option>
+				<option value="minimized">Minimized</option>
+				<option value="maximized">Maximized</option>
+			</select>
+		</div>
+		<div class="container">
+			<label class="label">
+				<h2>Leagues:</h2>
+			</label>
+			<div id="excludeLeagues"></div>
+		</div>
 		<script src="popup.js"></script>
 	</body>
 </html>
