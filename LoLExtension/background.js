@@ -68,6 +68,7 @@ let leagueWindowMap = new Map();
 
 async function checkSchedule(data) {
 	if (!data?.data?.schedule?.events) {
+		console.error('Schedule data is invalid:', data);
 		return;
 	}
 

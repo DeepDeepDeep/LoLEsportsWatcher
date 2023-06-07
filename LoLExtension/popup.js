@@ -91,10 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
 					leagueButton.textContent = 'ON';
 					leagueDiv.classList.remove('excluded');
 					includeLeague(leagueName);
+					excludedLeagues.delete(leagueName); 
 				} else {
 					leagueButton.textContent = 'OFF';
 					leagueDiv.classList.add('excluded');
 					excludeLeague(leagueName);
+					excludedLeagues.add(leagueName); 
 				}
 				chrome.storage.local.set({ excludedLeagues: Array.from(excludedLeagues) });
 			});
