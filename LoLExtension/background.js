@@ -83,7 +83,6 @@ async function checkSchedule(data) {
 		const matchID = event?.match?.id;
 
 		if (await isLeagueExcluded(leagueName)) {
-			console.log('Skipping', leagueName, 'because it is excluded');
 			continue;
 		}
 
@@ -92,7 +91,6 @@ async function checkSchedule(data) {
 				if (leagueWindowMap.has(leagueName) && !leagueWindowMap.get(leagueName).matchIDs.includes(matchID)) {
 					leagueWindowMap.get(leagueName).matchIDs.push(matchID);
 				} else if (!leagueWindowMap.has(leagueName)) {
-					console.log('Opening window for matches in', leagueName);
 					await openWindowForLeague(matchLeagueURL, leagueName, matchID, timeNow);
 				}
 			}
@@ -108,6 +106,11 @@ async function checkSchedule(data) {
 				leagueWindowMap.delete(leagueName);
 			}
 		}
+	}
+
+	for (const leagueName of leagueWindowMap.keys()) {
+		const matchLeagueURL = LEAGUE_MAP[leagueName];
+		checkWindowURL(matchLeagueURL);
 	}
 }
 
@@ -146,6 +149,27 @@ function isLeagueExcluded(leagueName) {
 			resolve(excludedLeagues.includes(leagueName));
 		});
 	});
+}
+
+//Used to handle weird cases where match doesn't start on time so window is opened
+function checkWindowURL(EXPECTED_URL) {
+	for (const [leagueName, leagueWindow] of leagueWindowMap.entries()) {
+		const windowID = leagueWindow.windowID;
+		chrome.windows.get(windowID, { populate: true }, (window) => {
+			if (chrome.runtime.lastError) {
+				console.log(`Window ${windowID} is closed or inaccessible`);
+				leagueWindowMap.delete(leagueName);
+			} else {
+				if (window.tabs && window.tabs.length > 0) {
+					const currentURL = window.tabs[0].url;
+					if (currentURL !== EXPECTED_URL) {
+						console.log(`Window ${windowID} redirected to: ${EXPECTED_URL}`);
+						chrome.tabs.update(window.tabs[0].id, { url: EXPECTED_URL });
+					}
+				}
+			}
+		});
+	}
 }
 
 chrome.runtime.onInstalled.addListener(function () {
