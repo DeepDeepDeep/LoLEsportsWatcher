@@ -92,7 +92,6 @@ async function checkSchedule(data) {
 				if (leagueWindowMap.has(leagueName) && !leagueWindowMap.get(leagueName).matchIDs.includes(matchID)) {
 					leagueWindowMap.get(leagueName).matchIDs.push(matchID);
 				} else if (!leagueWindowMap.has(leagueName)) {
-					console.log('Opening window for matches in', leagueName);
 					await openWindowForLeague(matchLeagueURL, leagueName, matchID, timeNow);
 				}
 			}
