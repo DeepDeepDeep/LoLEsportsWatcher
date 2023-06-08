@@ -21,7 +21,7 @@ const LEAGUE_MAP = {
 	'All-Star Event': '',
 	'NLC': 'https://lolesports.com/live/nlc/nlclol',
 	'Elite Series': 'https://lolesports.com/live/elite_series/esportsprimelol',
-	'PG Nationals': '',
+	'PG Nationals': 'https://lolesports.com/live/pg_nationals/pg_esports_lol',
 	'Ultraliga': 'https://lolesports.com/live/ultraliga/polsatgames2',
 	'SuperLiga': 'https://lolesports.com/live/superliga/lvpes',
 	'Prime League': 'https://lolesports.com/live/primeleague',
