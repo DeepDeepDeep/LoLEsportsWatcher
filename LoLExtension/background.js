@@ -83,7 +83,6 @@ async function checkSchedule(data) {
 		const matchID = event?.match?.id;
 
 		if (await isLeagueExcluded(leagueName)) {
-			console.log('Skipping', leagueName, 'because it is excluded');
 			continue;
 		}
 
