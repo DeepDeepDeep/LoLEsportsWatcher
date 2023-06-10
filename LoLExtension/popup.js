@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		'LCL',
 		'LEC',
 		'LCS',
+		'LPL',
 		'LCS Challengers',
 		'LCS Challengers Qualifiers',
 		'Liga Master',
