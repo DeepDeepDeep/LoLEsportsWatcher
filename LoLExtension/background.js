@@ -11,7 +11,7 @@ const LEAGUE_MAP = {
 	'LCL': 'https://lolesports.com/live/lcl/lcl',
 	'LCO': 'https://lolesports.com/live/lco/lco',
 	'LEC': 'https://lolesports.com/live/lec/lec',
-	'LJL': 'https://lolesports.com/live/ljl-japan/ljl',
+	'LJL': 'https://lolesports.com/live/ljl-japan/riotgamesjp',
 	'LLA': 'https://lolesports.com/live/lla/lla',
 	'LPL': 'https://lolesports.com/live/lpl/lpl',
 	'PCS': 'https://lolesports.com/live/pcs/lolpacific',
