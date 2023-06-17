@@ -6,7 +6,7 @@ const LEAGUE_MAP = {
 	'LCS Challengers': 'https://lolesports.com/live/north_american_challenger_league',
 	'LCS Challengers Qualifiers': 'https://lolesports.com/live/lcs_challengers_qualifiers',
 	'College Championship': '',
-	'CBLOL': 'https://lolesports.com/live/cblol',
+	'CBLOL': 'https://lolesports.com/live/cblol-brazil/cblolenglish',
 	'LCK': 'https://lolesports.com/live/lck/lck',
 	'LCL': 'https://lolesports.com/live/lcl/lcl',
 	'LCO': 'https://lolesports.com/live/lco/lco',
