@@ -16,7 +16,7 @@ const LEAGUE_MAP = {
 	'LPL': 'https://lolesports.com/live/lpl/lpl',
 	'PCS': 'https://lolesports.com/live/pcs/lolpacific',
 	'TCL': 'https://lolesports.com/live/turkiye-sampiyonluk-ligi/riotgamesturkish',
-	'VCS': '',
+	'VCS': 'https://lolesports.com/live/vcs/vcs',
 	'Worlds': 'https://lolesports.com/live/worlds',
 	'All-Star Event': '',
 	'NLC': 'https://lolesports.com/live/nlc/nlclol',
