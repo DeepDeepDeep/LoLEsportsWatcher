@@ -1,5 +1,5 @@
 const API_URL = 'https://leaguewatcher.onrender.com/schedule';
-const LEAGUES_LIST = 'http://leaguewatcher.onrender.com/leagues';
+const LEAGUES_URL = 'https://leaguewatcher.onrender.com/leagues';
 
 const MATCH_WINDOW = 900 * 1000; // 15 minutes
 const SCHEDULE_POLL_INTERVAL = 300 * 1000; // 5 minutes
@@ -16,7 +16,7 @@ async function fetchSchedule() {
 
 async function fetchLeagues() {
 	try {
-		const response = await fetch(LEAGUES_LIST);
+		const response = await fetch(LEAGUES_URL);
 		const data = await response.json();
 		return data;
 	} catch (error) {
@@ -102,7 +102,8 @@ function openWindowForLeague(url, leagueName, matchID, timeNow) {
 async function checkURL() {
 	for (const [leagueName, leagueWindow] of leagueWindowMap.entries()) {
 		const { windowID } = leagueWindow;
-		const matchLeagueURL = LEAGUE_MAP[leagueName];
+		const leagueList = await fetchLeagues();
+		const matchLeagueURL = leagueList[leagueName];
 
 		await updateTabURL(windowID, matchLeagueURL);
 	}
