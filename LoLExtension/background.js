@@ -1,55 +1,5 @@
 const API_URL = 'https://leaguewatcher.onrender.com/schedule';
-const LEAGUE_MAP = {
-	'EMEA Masters': 'https://lolesports.com/live/emea_masters/emeamasters',
-	'MSI': 'https://lolesports.com/live/msi/riotgames',
-	'LCS': 'https://lolesports.com/live/lcs/lcs',
-	'LCS Challengers': 'https://lolesports.com/live/north_american_challenger_league',
-	'LCS Challengers Qualifiers': 'https://lolesports.com/live/lcs_challengers_qualifiers/lcs_challengers',
-	'College Championship': '',
-	'CBLOL': 'https://lolesports.com/live/cblol-brazil/cblolenglish',
-	'LCK': 'https://lolesports.com/live/lck/lck',
-	'LCL': 'https://lolesports.com/live/lcl/lcl',
-	'LCO': 'https://lolesports.com/live/lco/lco',
-	'LEC': 'https://lolesports.com/live/lec/lec',
-	'LJL': 'https://lolesports.com/live/ljl-japan/riotgamesjp',
-	'LLA': 'https://lolesports.com/live/lla/lla',
-	'LPL': 'https://lolesports.com/live/lpl/lpl',
-	'PCS': 'https://lolesports.com/live/pcs/lolpacific',
-	'TCL': 'https://lolesports.com/live/turkiye-sampiyonluk-ligi/riotgamesturkish',
-	'VCS': 'https://lolesports.com/live/vcs/vcs',
-	'Worlds': 'https://lolesports.com/live/worlds',
-	'All-Star Event': '',
-	'NLC': 'https://lolesports.com/live/nlc/nlclol',
-	'Elite Series': 'https://lolesports.com/live/elite_series/esportsprimelol',
-	'PG Nationals': 'https://lolesports.com/live/pg_nationals/pg_esports_lol',
-	'Ultraliga': 'https://lolesports.com/live/ultraliga/polsatgames2',
-	'SuperLiga': 'https://lolesports.com/live/superliga/lvpes',
-	'Prime League': 'https://lolesports.com/live/primeleague',
-	'Hitpoint Masters': 'https://lolesports.com/live/hitpoint_masters/hitpointcz',
-	'Esports Balkan League': '',
-	'Greek Legends League': 'https://lolesports.com/live/greek_legends/gamersloungegr',
-	'Arabian League': 'https://lolesports.com/live/arabian_league',
-	'LCK Academy': '',
-	'LJL Academy': 'https://lolesports.com/live/ljl_academy',
-	'LCK Challengers': 'https://lolesports.com/live/lck_challengers_league/lckcl',
-	'CBLOL Academy': 'https://lolesports.com/live/cblol_academy',
-	'Liga Master': '',
-	'Golden League': '',
-	'Elements League': '',
-	'Stars League': '',
-	'Honor Division': '',
-	'Volcano League': '',
-	'Honor League': '',
-	'TFT Rising Legends': 'https://lolesports.com/live/tft_esports/teamfighttactics',
-	'TAL': '',
-	'Master Flow League': '',
-	'TFT Western LCQ': 'https://lolesports.com/live/tft_esports/teamfighttactics',
-	'North Regional League': 'https://lolesports.com/live/north_regional_league/lvpnorte',
-	'South Regional League': 'https://lolesports.com/live/south_regional_league/lvpsur',
-	'TFT Monsters Attack!': 'https://lolesports.com/live/tft_esports/teamfighttactics',
-	'La Ligue Fran\u00e7aise': 'https://lolesports.com/live/lfl/otplol_',
-	'Liga Portuguesa': 'https://lolesports.com/live/liga_portuguesa/inygontv1',
-};
+const LEAGUES_URL = 'https://leaguewatcher.onrender.com/leagues';
 
 const MATCH_WINDOW = 900 * 1000; // 15 minutes
 const SCHEDULE_POLL_INTERVAL = 300 * 1000; // 5 minutes
@@ -59,6 +9,16 @@ async function fetchSchedule() {
 		const response = await fetch(API_URL);
 		const data = await response.json();
 		checkSchedule(data);
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+async function fetchLeagues() {
+	try {
+		const response = await fetch(LEAGUES_URL);
+		const data = await response.json();
+		return data;
 	} catch (error) {
 		console.error(error);
 	}
@@ -75,9 +35,10 @@ async function checkSchedule(data) {
 	const events = data.data.schedule.events;
 	const date = new Date();
 	const timeNow = new Date().toLocaleString();
+	const leagueList = await fetchLeagues();
 
 	for (const event of events) {
-		const matchLeagueURL = LEAGUE_MAP[event.league.name];
+		const matchLeagueURL = leagueList[event.league.name];
 		const timeUntilMatch = new Date(event.startTime) - date;
 		const leagueName = event.league.name;
 		const matchID = event?.match?.id;
@@ -107,6 +68,7 @@ async function checkSchedule(data) {
 			}
 		}
 	}
+	await checkURL();
 }
 
 chrome.windows.onRemoved.addListener((windowId) => {
@@ -137,11 +99,46 @@ function openWindowForLeague(url, leagueName, matchID, timeNow) {
 	});
 }
 
+async function checkURL() {
+	for (const [leagueName, leagueWindow] of leagueWindowMap.entries()) {
+		const { windowID } = leagueWindow;
+		const leagueList = await fetchLeagues();
+		const matchLeagueURL = leagueList[leagueName];
+
+		await updateTabURL(windowID, matchLeagueURL);
+	}
+}
+
 function isLeagueExcluded(leagueName) {
 	return new Promise((resolve) => {
 		chrome.storage.local.get('excludedLeagues', (result) => {
 			const excludedLeagues = result.excludedLeagues || [];
 			resolve(excludedLeagues.includes(leagueName));
+		});
+	});
+}
+
+async function updateTabURL(windowId, matchURL) {
+	return new Promise((resolve) => {
+		chrome.tabs.query({ windowId }, (tabs) => {
+			if (tabs && tabs.length > 0) {
+				const tab = tabs[0];
+				const tabId = tab.id;
+				if (tab.status === 'complete') {
+					const currentURL = tab.url;
+					if (currentURL !== matchURL) {
+						chrome.tabs.update(tabId, { url }, (updatedTab) => {
+							resolve(updatedTab);
+						});
+					} else {
+						resolve(tab);
+					}
+				} else {
+					resolve(tab);
+				}
+			} else {
+				resolve(null);
+			}
 		});
 	});
 }
