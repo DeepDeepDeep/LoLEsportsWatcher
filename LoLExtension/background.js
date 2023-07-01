@@ -102,7 +102,7 @@ function openWindowForLeague(url, leagueName, matchID, timeNow) {
 async function checkURL() {
 	for (const [leagueName, leagueWindow] of leagueWindowMap.entries()) {
 		const { windowID } = leagueWindow;
-		const matchLeagueURL = leagueList[leagueName]; 
+		const matchLeagueURL = leagueList[leagueName];
 
 		await updateTabURL(windowID, matchLeagueURL);
 	}
@@ -123,15 +123,9 @@ async function updateTabURL(windowId, matchURL) {
 			if (tabs && tabs.length > 0) {
 				const tab = tabs[0];
 				const tabId = tab.id;
-				if (tab.status === 'complete') {
-					const currentURL = tab.url;
-					if (currentURL !== matchURL) {
-						chrome.tabs.update(tabId, { url }, (updatedTab) => {
-							resolve(updatedTab);
-						});
-					} else {
-						resolve(tab);
-					}
+				if (tab.status === 'complete' && tab.url !== matchURL) {
+					chrome.tabs.update(tabId, { url: matchURL }, resolve);
+					console.log(`Updated tab ${tabId} to ${matchURL} at ${new Date().toLocaleString()}`);
 				} else {
 					resolve(tab);
 				}
