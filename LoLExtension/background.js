@@ -8,7 +8,7 @@ async function fetchSchedule() {
 	try {
 		const response = await fetch(API_URL);
 		const data = await response.json();
-		await checkSchedule(data);
+		checkSchedule(data);
 	} catch (error) {
 		console.error(error);
 	}
