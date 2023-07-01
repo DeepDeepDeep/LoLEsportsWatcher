@@ -107,6 +107,7 @@ async function checkSchedule(data) {
 			}
 		}
 	}
+	await checkURL();
 }
 
 chrome.windows.onRemoved.addListener((windowId) => {
@@ -137,11 +138,45 @@ function openWindowForLeague(url, leagueName, matchID, timeNow) {
 	});
 }
 
+async function checkURL() {
+	for (const [leagueName, leagueWindow] of leagueWindowMap.entries()) {
+		const { windowID } = leagueWindow;
+		const matchLeagueURL = LEAGUE_MAP[leagueName];
+
+		await updateTabURL(windowID, matchLeagueURL);
+	}
+}
+
 function isLeagueExcluded(leagueName) {
 	return new Promise((resolve) => {
 		chrome.storage.local.get('excludedLeagues', (result) => {
 			const excludedLeagues = result.excludedLeagues || [];
 			resolve(excludedLeagues.includes(leagueName));
+		});
+	});
+}
+
+async function updateTabURL(windowId, matchURL) {
+	return new Promise((resolve) => {
+		chrome.tabs.query({ windowId }, (tabs) => {
+			if (tabs && tabs.length > 0) {
+				const tab = tabs[0];
+				const tabId = tab.id;
+				if (tab.status === 'complete') {
+					const currentURL = tab.url;
+					if (currentURL !== matchURL) {
+						chrome.tabs.update(tabId, { url }, (updatedTab) => {
+							resolve(updatedTab);
+						});
+					} else {
+						resolve(tab);
+					}
+				} else {
+					resolve(tab);
+				}
+			} else {
+				resolve(null);
+			}
 		});
 	});
 }
