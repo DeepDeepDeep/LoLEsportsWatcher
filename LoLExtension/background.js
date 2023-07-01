@@ -8,7 +8,7 @@ async function fetchSchedule() {
 	try {
 		const response = await fetch(API_URL);
 		const data = await response.json();
-		checkSchedule(data);
+		await checkSchedule(data);
 	} catch (error) {
 		console.error(error);
 	}
@@ -17,14 +17,14 @@ async function fetchSchedule() {
 async function fetchLeagues() {
 	try {
 		const response = await fetch(LEAGUES_URL);
-		const data = await response.json();
-		return data;
+		return await response.json();
 	} catch (error) {
 		console.error(error);
 	}
 }
 
 let leagueWindowMap = new Map();
+let leagueList = null;
 
 async function checkSchedule(data) {
 	if (!data?.data?.schedule?.events) {
@@ -35,7 +35,7 @@ async function checkSchedule(data) {
 	const events = data.data.schedule.events;
 	const date = new Date();
 	const timeNow = new Date().toLocaleString();
-	const leagueList = await fetchLeagues();
+	leagueList = await fetchLeagues();
 
 	for (const event of events) {
 		const matchLeagueURL = leagueList[event.league.name];
@@ -102,8 +102,7 @@ function openWindowForLeague(url, leagueName, matchID, timeNow) {
 async function checkURL() {
 	for (const [leagueName, leagueWindow] of leagueWindowMap.entries()) {
 		const { windowID } = leagueWindow;
-		const leagueList = await fetchLeagues();
-		const matchLeagueURL = leagueList[leagueName];
+		const matchLeagueURL = leagueList[leagueName]; 
 
 		await updateTabURL(windowID, matchLeagueURL);
 	}
