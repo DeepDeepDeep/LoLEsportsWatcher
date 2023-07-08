@@ -23,7 +23,7 @@ async function fetchLeagues() {
 	}
 }
 
-let leagueWindowMap = new Map();
+const leagueWindowMap = new Map();
 let leagueList = null;
 
 async function checkSchedule(data) {
