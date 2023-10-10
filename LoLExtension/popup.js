@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		'VCS',
 		'Volcano League',
 		'Worlds',
+		'Worlds Qualifying Series',
 	];
 
 	chrome.storage.local.get('excludedLeagues', (result) => {
