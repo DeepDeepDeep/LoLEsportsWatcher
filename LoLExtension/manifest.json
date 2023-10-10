@@ -11,9 +11,7 @@
     "tabs",
     "storage",
     "https://leaguewatcher.onrender.com/*",
-    "https://lolesports.com/*",
-    "webRequest",
-    "webRequestBlocking"
+    "https://lolesports.com/*"
   ],
   "browser_action": {
     "default_popup": "popup.html"

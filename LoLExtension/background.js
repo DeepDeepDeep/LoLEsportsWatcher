@@ -48,15 +48,12 @@ async function checkSchedule(data) {
 		}
 
 		if (event?.state === 'unstarted' || (event?.state === 'inProgress' && event?.type === 'match')) {
-			if (timeUntilMatch <= MATCH_WINDOW ||
-			  (event?.state === 'inProgress' && leagueWindowMap.has(leagueName)) || // Accounts for matches starting earlier 
-			  (event?.state === 'inProgress' && !leagueWindowMap.has(leagueName)) 
-			) {
-			  if (leagueWindowMap.has(leagueName) && !leagueWindowMap.get(leagueName).matchIDs.includes(matchID)) {
-				leagueWindowMap.get(leagueName).matchIDs.push(matchID);
-			  } else if (!leagueWindowMap.has(leagueName)) {
-				await openWindowForLeague(matchLeagueURL, leagueName, matchID, timeNow);
-			  }
+			if (timeUntilMatch <= MATCH_WINDOW) {
+				if (leagueWindowMap.has(leagueName) && !leagueWindowMap.get(leagueName).matchIDs.includes(matchID)) {
+					leagueWindowMap.get(leagueName).matchIDs.push(matchID);
+				} else if (!leagueWindowMap.has(leagueName)) {
+					await openWindowForLeague(matchLeagueURL, leagueName, matchID, timeNow);
+				}
 			}
 		} else if (event?.state === 'completed') {
 			if (leagueWindowMap.has(leagueName) && leagueWindowMap.get(leagueName).matchIDs.includes(matchID)) {
@@ -70,7 +67,6 @@ async function checkSchedule(data) {
 				leagueWindowMap.delete(leagueName);
 			}
 		}
-		  
 	}
 	await checkURL();
 }
@@ -85,43 +81,23 @@ chrome.windows.onRemoved.addListener((windowId) => {
 	}
 });
 
-// Updated openWindowForLeague function
-async function openWindowForLeague(url, leagueName, matchID, timeNow) {
+function openWindowForLeague(url, leagueName, matchID, timeNow) {
 	return new Promise(async (resolve) => {
-	  const windowStatePromise = new Promise((resolveState) => {
-		chrome.storage.local.get('windowState', (result) => {
-		  const windowState = result.windowState || 'normal';
-		  resolveState(windowState);
+		const windowStatePromise = new Promise((resolveState) => {
+			chrome.storage.local.get('windowState', (result) => {
+				const windowState = result.windowState || 'normal';
+				resolveState(windowState);
+			});
 		});
-	  });
-  
-	  const windowState = await windowStatePromise;
-  
-	  // Create the window
-	  chrome.windows.create({ url, state: windowState }, async (window) => {
-		leagueWindowMap.set(leagueName, { matchIDs: [matchID], windowID: window.id });
-		console.log(`Opened window for matches in ${leagueName} at ${timeNow}`);
-		
-		chrome.webRequest.onBeforeSendHeaders.addListener(
-		  function(details) {
-			const leagueData = leagueWindowMap.get(leagueName);
-			if (leagueData && details.tabId === tab.id) {
-			  details.requestHeaders.push({
-				name: "Referer",
-				value: "https://lolesports.com/",
-			  });
-			}
-			return { requestHeaders: details.requestHeaders };
-		  },
-		  { urls: ["<all_urls>"], tabId: window.tabs[0].id },
-		  ["blocking", "requestHeaders"]
-		);
-  
-		resolve();
-	  });
+
+		const windowState = await windowStatePromise;
+		chrome.windows.create({ url, state: windowState }, (window) => {
+			leagueWindowMap.set(leagueName, { matchIDs: [matchID], windowID: window.id });
+			console.log(`Opened window for matches in ${leagueName} at ${timeNow}`);
+			resolve();
+		});
 	});
-  }
-  
+}
 
 async function checkURL() {
 	for (const [leagueName, leagueWindow] of leagueWindowMap.entries()) {
@@ -159,7 +135,6 @@ async function updateTabURL(windowId, matchURL) {
 		});
 	});
 }
-
 
 chrome.runtime.onInstalled.addListener(function () {
 	fetchSchedule();
