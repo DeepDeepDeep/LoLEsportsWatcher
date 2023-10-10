@@ -48,7 +48,11 @@ async function checkSchedule(data) {
 		}
 
 		if (event?.state === 'unstarted' || (event?.state === 'inProgress' && event?.type === 'match')) {
-			if (timeUntilMatch <= MATCH_WINDOW) {
+			if (
+				timeUntilMatch <= MATCH_WINDOW ||
+				(event?.state === 'inProgress' && leagueWindowMap.has(leagueName)) || // Accounts for matches starting earlier
+				(event?.state === 'inProgress' && !leagueWindowMap.has(leagueName))
+			) {
 				if (leagueWindowMap.has(leagueName) && !leagueWindowMap.get(leagueName).matchIDs.includes(matchID)) {
 					leagueWindowMap.get(leagueName).matchIDs.push(matchID);
 				} else if (!leagueWindowMap.has(leagueName)) {
