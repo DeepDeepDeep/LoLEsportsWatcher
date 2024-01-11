@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		'TCL',
 		'TFT Monsters Attack!',
 		'TFT Runeterra Reforged',
-		'TFT Western LCQ',
+		'TFT Rising Legends',
 		'Ultraliga',
 		'VCS',
 		'Volcano League',
