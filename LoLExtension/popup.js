@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		'Worlds',
 		'Worlds Qualifying Series',
 		"King's Duel",
+		"LoL Italian Tournament",
 	];
 
 	chrome.storage.local.get('excludedLeagues', (result) => {
