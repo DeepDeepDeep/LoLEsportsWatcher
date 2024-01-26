@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		'LJL Academy',
 		'LLA',
 		'LCO',
-		'LCS',
 		'Master Flow League',
 		'MSI',
 		'NLC',
