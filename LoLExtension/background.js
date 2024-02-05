@@ -148,7 +148,7 @@ async function openWindowForLeague(matchURL, leagueName, matchID, timeNow) {
 
 
     if (provider === 'youtube' && youtubeStream) {
-		let streamId = youtubeStream.parameter;
+	let streamId = youtubeStream.parameter;
         url = replaceURL(matchURL, streamId);
     } else {
         url = matchURL; 
