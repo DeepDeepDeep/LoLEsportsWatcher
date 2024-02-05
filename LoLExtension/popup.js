@@ -1,10 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
 	const select = document.getElementById('state');
+	const providerSelect = document.getElementById('provider'); 
 	const excludeLeaguesContainer = document.getElementById('excludeLeagues');
 
 	chrome.storage.local.get('windowState', (result) => {
 		select.value = result.windowState || 'normal';
 	});
+
+	chrome.storage.local.get('provider', (result) => {
+        providerSelect.value = result.provider || 'twitch'; 
+    });
+
+	providerSelect.addEventListener('change', () => { 
+        const selectedProvider = providerSelect.value; 
+        chrome.storage.local.set({ provider: selectedProvider }); 
+    });
 
 	select.addEventListener('change', () => {
 		const selectedState = select.value;
@@ -63,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		'Worlds',
 		'Worlds Qualifying Series',
 		"King's Duel",
-		"LoL Italian Tournament",
+		'LoL Italian Tournament',
 	];
 
 	chrome.storage.local.get('excludedLeagues', (result) => {
