@@ -6,63 +6,65 @@ const MATCH_WINDOW = 900 * 1000; // 15 minutes
 const SCHEDULE_POLL_INTERVAL = 180 * 1000; // 3 minutes
 
 const leagueWindowMap = new Map();
+const PROVIDER_TWITCH = 'twitch';
+const PROVIDER_YOUTUBE = 'youtube';
+
 let leagueList = null;
 
-
 async function getFromLocalStorage(key, defaultValue) {
-    return new Promise((resolve) => {
-        chrome.storage.local.get(key, (result) => {
-            resolve(result[key] || defaultValue);
-        });
-    });
+	return new Promise((resolve) => {
+		chrome.storage.local.get(key, (result) => {
+			resolve(result[key] || defaultValue);
+		});
+	});
 }
 
 const isLeagueExcluded = async (leagueName) => {
-	const excludedLeagues = await getFromLocalStorage('excludedLeagues') || [];
+	const excludedLeagues = (await getFromLocalStorage('excludedLeagues')) || [];
 	return excludedLeagues.includes(leagueName);
-  };
+};
 
 const fetchJson = async (url) => {
-  try {
-    const response = await fetch(url);
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-  }
+	try {
+		const response = await fetch(url);
+		return await response.json();
+	} catch (error) {
+		console.error(error);
+	}
 };
 
 const fetchSchedule = async () => {
-  const data = await fetchJson(API_URL);
-  checkSchedule(data);
+	const data = await fetchJson(API_URL);
+	checkSchedule(data);
 };
 
 const fetchLeagues = async () => {
-  return await fetchJson(LEAGUES_URL);
+	return await fetchJson(LEAGUES_URL);
 };
 
 const fetchStreams = async (leagueName) => {
-    const data = await fetchJson(STREAMS_URL);
-    let streams = [];
-    
-    if (!data?.data?.schedule?.events) {
-        console.log('No events found in data');
-        return streams;
-    }
+	const data = await fetchJson(STREAMS_URL);
+	let streams = [];
 
-    const events = data.data.schedule.events;
-    for (const event of events) {
-        if (event.league.name === leagueName) {
-            try {
-                for (const stream of event.streams) {
-                    streams.push(stream);
-                }
-            } catch (error) {
-                console.error(error); 
-            }
-        }
-    }
-    return streams;
-}
+	if (!data?.data?.schedule?.events) {
+		console.log('No events found in data');
+		return streams;
+	}
+
+	const events = data.data.schedule.events;
+	for (const event of events) {
+		if (event.league.name === leagueName) {
+			try {
+				for (const stream of event.streams) {
+					streams.push(stream);
+				}
+			} catch (error) {
+				console.error(error);
+			}
+		}
+	}
+	return streams;
+};
 
 async function checkSchedule(data) {
 	if (!data?.data?.schedule?.events) {
@@ -121,83 +123,74 @@ chrome.windows.onRemoved.addListener((windowId) => {
 			break;
 		}
 	}
-}); 
-
+});
 
 async function createWindow(url, state) {
-    return new Promise((resolve) => {
-        chrome.windows.create({ url, state }, resolve);
-    });
+	return new Promise((resolve) => {
+		chrome.windows.create({ url, state }, resolve);
+	});
 }
 
 function replaceURL(url, parameter) {
-    let urlObj = new URL(url);
-    let pathnames = urlObj.pathname.split('/').filter(Boolean);
-    pathnames[pathnames.length - 1] = parameter;
-    urlObj.pathname = pathnames.join('/');
-    return urlObj.toString();
+	let urlObj = new URL(url);
+	let pathnames = urlObj.pathname.split('/').filter(Boolean);
+	pathnames[pathnames.length - 1] = parameter;
+	urlObj.pathname = pathnames.join('/');
+	return urlObj.toString();
 }
 
-async function openWindowForLeague(matchURL, leagueName, matchID, timeNow) {
-    const windowState = await getFromLocalStorage('windowState', 'normal');
-    const provider = await getFromLocalStorage('provider', 'twitch');
-    let url;    
+const streamURL = async (matchURL, leagueName) => {
+	const provider = await getFromLocalStorage('provider', PROVIDER_TWITCH);
+	const streams = await fetchStreams(leagueName);
+	const youtubeStream = streams.find((stream) => stream.provider === PROVIDER_YOUTUBE);
 
-    const streams = await fetchStreams(leagueName);
-    const youtubeStream = streams.find(stream => stream.provider === 'youtube');
-
-
-    if (provider === 'youtube' && youtubeStream) {
+	let url;
+	if (provider === PROVIDER_YOUTUBE && youtubeStream) {
 		let streamId = youtubeStream.parameter;
-        url = replaceURL(matchURL, streamId);
-    } else {
-        url = matchURL; 
-    }
+		url = replaceURL(matchURL, streamId);
+	} else {
+		url = matchURL;
+	}
 
-    const window = await createWindow(url, windowState);
-    leagueWindowMap.set(leagueName, { matchIDs: [matchID], windowID: window.id });
-    console.log(`Opened window for matches in ${leagueName} at ${timeNow} using ${provider}`);
+	return url;
+};
+
+async function openWindowForLeague(matchURL, leagueName, matchID, timeNow) {
+	const windowState = await getFromLocalStorage('windowState', 'normal');
+	const url = await streamURL(matchURL, leagueName);
+
+	const window = await createWindow(url, windowState);
+	leagueWindowMap.set(leagueName, { matchIDs: [matchID], windowID: window.id });
+	console.log(`Opened window for matches in ${leagueName} at ${timeNow} using ${provider}`);
 }
 
 async function checkURL() {
-    const provider = await getFromLocalStorage('provider', 'twitch');
+	for (const [leagueName, leagueWindow] of leagueWindowMap.entries()) {
+		const { windowID } = leagueWindow;
+		const matchLeagueURL = leagueList[leagueName];
+		const url = await streamURL(matchLeagueURL, leagueName);
 
-    for (const [leagueName, leagueWindow] of leagueWindowMap.entries()) {
-        const { windowID } = leagueWindow;
-        const matchLeagueURL = leagueList[leagueName];
-
-        let url = matchLeagueURL;
-
-        if (provider === 'youtube') {
-            const streams = await fetchStreams(leagueName);
-            const youtubeStream = streams.find(stream => stream.provider === 'youtube');
-            if (youtubeStream) {
-                let streamId = youtubeStream.parameter;
-                url = replaceURL(matchLeagueURL, streamId);
-            }
-        }
-
-        await updateTabURL(windowID, url);
-    }
+		await updateTabURL(windowID, url);
+	}
 }
 
 async function getTab(windowId) {
-    return new Promise((resolve) => {
-        chrome.tabs.query({ windowId }, (tabs) => {
-            resolve(tabs && tabs.length > 0 ? tabs[0] : null);
-        });
-    });
+	return new Promise((resolve) => {
+		chrome.tabs.query({ windowId }, (tabs) => {
+			resolve(tabs && tabs.length > 0 ? tabs[0] : null);
+		});
+	});
 }
 
 async function updateTabURL(windowId, matchURL) {
-    const tab = await getTab(windowId);
-    if (tab && tab.status === 'complete' && tab.url !== matchURL) {
-        return new Promise((resolve) => {
-            chrome.tabs.update(tab.id, { url: matchURL }, resolve);
-            console.log(`Updated tab ${tab.id} to ${matchURL} at ${new Date().toLocaleString()}`);
-        });
-    }
-    return tab;
+	const tab = await getTab(windowId);
+	if (tab && tab.status === 'complete' && tab.url !== matchURL) {
+		return new Promise((resolve) => {
+			chrome.tabs.update(tab.id, { url: matchURL }, resolve);
+			console.log(`Updated tab ${tab.id} to ${matchURL} at ${new Date().toLocaleString()}`);
+		});
+	}
+	return tab;
 }
 
 chrome.runtime.onInstalled.addListener(fetchSchedule);
