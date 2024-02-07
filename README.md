@@ -15,15 +15,17 @@ The extension periodically checks for new matches every five minutes and automat
 
 ### Window State
 Customize the state of the popup window in the Chrome extension. Choose between "normal", "minimized", or "maximized".
+<img width="269" alt="image" src="https://github.com/DeepDeepDeep/LoLEsportsWatcher/assets/54153890/e371d034-d406-4f90-9a86-93d7b67d419e">
 
-![image](https://github.com/DeepDeepDeep/LoLEsportsWatcher/assets/54153890/9369458a-d3ee-46cc-ac02-014d5dc2847d)
 
 ### Exclude Leagues
 Exclude specific leagues from being opened. 
+<img width="288" alt="image" src="https://github.com/DeepDeepDeep/LoLEsportsWatcher/assets/54153890/e073b098-8e2d-44c2-9fad-2bb8f5174e07">
 
-![image](https://github.com/DeepDeepDeep/LoLEsportsWatcher/assets/54153890/7ef1d37d-1e65-48c5-be38-038c6bf7637d)
+### Choose Provider
+<img width="276" alt="image" src="https://github.com/DeepDeepDeep/LoLEsportsWatcher/assets/54153890/60637e98-6101-4e85-bc7d-fec96bfc3863">
 
-
+#### `--autoplay-policy=no-user-gesture-required` is required for Youtube streams to automatically play.
 
 # Chrome Memory Saver 
 If you have the Memory Saver feature enabled, add lolesports.com to the exclusion: 
