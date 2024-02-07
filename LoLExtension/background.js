@@ -48,7 +48,7 @@ const fetchStreams = async (leagueName) => {
 
 	if (!data?.data?.schedule?.events) {
 		console.log('No events found in data');
-		return streams;
+		return { streams, hasStreams: false };
 	}
 
 	const events = data.data.schedule.events;
@@ -63,7 +63,7 @@ const fetchStreams = async (leagueName) => {
 			}
 		}
 	}
-	return streams;
+	return { streams, hasStreams: streams.length > 0 };
 };
 
 async function checkSchedule(data) {
@@ -96,7 +96,10 @@ async function checkSchedule(data) {
 				if (leagueWindowMap.has(leagueName) && !leagueWindowMap.get(leagueName).matchIDs.includes(matchID)) {
 					leagueWindowMap.get(leagueName).matchIDs.push(matchID);
 				} else if (!leagueWindowMap.has(leagueName)) {
-					await openWindowForLeague(matchLeagueURL, leagueName, matchID, timeNow);
+					const { hasStreams } = await fetchStreams(leagueName);
+					if (hasStreams) {
+						await openWindowForLeague(matchLeagueURL, leagueName, matchID, timeNow);
+					}
 				}
 			}
 		} else if (event?.state === 'completed') {
@@ -141,12 +144,12 @@ function replaceURL(url, parameter) {
 
 const streamURL = async (matchURL, leagueName) => {
 	const provider = await getFromLocalStorage('provider', PROVIDER_TWITCH);
-	const streams = await fetchStreams(leagueName);
+	const { streams } = await fetchStreams(leagueName);
 	const youtubeStream = streams.find((stream) => stream.provider === PROVIDER_YOUTUBE);
 
 	let url;
 	if (provider === PROVIDER_YOUTUBE && youtubeStream) {
-	let streamId = youtubeStream.parameter;
+		let streamId = youtubeStream.parameter;
 		url = replaceURL(matchURL, streamId);
 	} else {
 		url = matchURL;
