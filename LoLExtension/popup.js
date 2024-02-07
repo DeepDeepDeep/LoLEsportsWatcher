@@ -1,9 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
 	const select = document.getElementById('state');
+	const providerSelect = document.getElementById('provider');
 	const excludeLeaguesContainer = document.getElementById('excludeLeagues');
 
 	chrome.storage.local.get('windowState', (result) => {
 		select.value = result.windowState || 'normal';
+	});
+
+	chrome.storage.local.get('provider', (result) => {
+		providerSelect.value = result.provider || 'twitch';
+	});
+
+	providerSelect.addEventListener('change', () => {
+		const selectedProvider = providerSelect.value;
+		chrome.storage.local.set({ provider: selectedProvider });
 	});
 
 	select.addEventListener('change', () => {
@@ -26,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		'Hitpoint Masters',
 		'Honor Division',
 		'Honor League',
+		"King's Duel",
 		'La Ligue Française',
 		'LCK',
 		'LCK Academy',
@@ -42,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		'LJL Academy',
 		'LLA',
 		'LCO',
+		'LoL Italian Tournament',
 		'Master Flow League',
 		'MSI',
 		'NLC',
@@ -55,15 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		'TAL',
 		'TCL',
 		'TFT Monsters Attack!',
-		'TFT Runeterra Reforged',
 		'TFT Rising Legends',
+		'TFT Runeterra Reforged',
 		'Ultraliga',
 		'VCS',
 		'Volcano League',
 		'Worlds',
 		'Worlds Qualifying Series',
-		"King's Duel",
-		"LoL Italian Tournament",
 	];
 
 	chrome.storage.local.get('excludedLeagues', (result) => {

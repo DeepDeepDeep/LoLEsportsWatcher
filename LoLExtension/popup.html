@@ -1,129 +1,151 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8" />
-		<title>LoL Watcher</title>
-		<style>
-			body {
-				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-				margin: 0;
-				padding: 0;
-				background-color: #f2f2f2;
-				width: 300px;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-			}
+<html lang="en">
 
-			h1 {
-				font-size: 20px;
-				margin-top: 10px;
-				margin-bottom: 10px;
-				color: #333333;
-				text-align: center;
-			}
+<head>
+    <meta charset="UTF-8" />
+    <title>LoL Watcher</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
 
-			h2 {
-				font-size: 16px;
-				color: #666666;
-				margin-top: 10px;
-				margin-bottom: 10px;
-				text-align: center;
-			}
+        h1 {
+            font-size: 32px;
+            margin: 10px 0;
+            color: #333;
+            text-align: center;
+        }
 
-			.container {
-				width: 250px;
-				margin-bottom: 20px;
-			}
+        h2 {
+            font-size: 18px;
+            color: #555;
+            margin: 10px 0;
+            text-align: center;
+        }
 
-			.label {
-				font-size: 14px;
-				margin-top: 10px;
-				margin-bottom: 5px;
-				color: #666666;
-				width: 100%;
-			}
+        .container {
+            width: 250px;
+            margin-bottom: 20px;
+        }
 
-			.button-container {
-				display: flex;
-				align-items: center;
-				margin-top: 10px;
-			}
+        .label {
+            font-size: 14px;
+            margin: 10px 0 5px;
+            color: #777;
+            width: 100%;
+        }
 
-			.button {
-				width: 50px;
-				height: 25px;
-				border-radius: 12.5px;
-				border: none;
-				cursor: pointer;
-				margin-right: 5px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				font-size: 12px;
-				font-weight: bold;
-				transition: background-color 0.3s ease;
-			}
+        .button-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
 
-			.button.on {
-				background-color: #00cc00;
-				color: #ffffff;
-			}
+        .button {
+            width: 50px;
+            height: 25px;
+            border-radius: 12.5px;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
 
-			.button.off {
-				background-color: #ff0000;
-				color: #666666;
-			}
+        .button.on {
+            background-color: #27ae60;
+            color: #ffffff;
+        }
 
-			.button:hover {
-				background-color: #0056b3;
-			}
+        .button.off {
+            background-color: #e74c3c;
+            color: #ffffff;
+        }
 
-			.excluded .button {
-				background-color: #ff0000;
-				color: #666666;
-			}
+        .button:hover {
+            background-color: #3498db;
+        }
 
-			.included .button {
-				background-color: #00cc00;
-				color: #ffffff;
-			}
+        .excluded .button {
+            background-color: #e74c3c;
+            color: #ffffff;
+        }
 
-			.select {
-				width: 100%;
-				height: 25px;
-				border-radius: 4px;
-				border: 1px solid #cccccc;
-				background-color: #ffffff;
-				color: #333333;
-				font-size: 12px;
-				padding: 0 5px;
-			}
+        .included .button {
+            background-color: #27ae60;
+            color: #ffffff;
+        }
 
-			.select:focus {
-				outline: none;
-				border-color: #007bff;
-				box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-			}
-		</style>
-	</head>
-	<body>
-		<h1>LoL Watcher</h1>
-		<div class="container">
-			<label class="label" for="state">Window State:</label>
-			<select class="select" id="state">
-				<option value="normal">Normal</option>
-				<option value="minimized">Minimized</option>
-				<option value="maximized">Maximized</option>
-			</select>
-		</div>
-		<div class="container">
-			<label class="label">
-				<h2>Leagues:</h2>
-			</label>
-			<div id="excludeLeagues"></div>
-		</div>
-		<script src="popup.js"></script>
-	</body>
+        .select {
+            width: 100%;
+            height: 30px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background-color: #ecf0f1;
+            color: #333;
+            font-size: 14px;
+            padding: 0 10px;
+        }
+
+        .select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+
+        .provider-container,
+        .state-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .provider-container .select,
+        .state-container .select {
+            width: 80%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>LoL Watcher</h1>
+    <div class="container state-container">
+        <label class="label" for="state">Window State</label>
+        <select class="select" id="state">
+            <option value="normal">Normal</option>
+            <option value="minimized">Minimized</option>
+            <option value="maximized">Maximized</option>
+        </select>
+    </div>
+    <div class="container provider-container">
+        <label class="label" for="provider">Provider</label>
+        <select class="select" id="provider">
+            <option value="twitch">Twitch</option>
+            <option value="youtube">YouTube</option>
+        </select>
+    </div>
+    <div class="container">
+        <label class="label">
+            <h2>Leagues</h2>
+        </label>
+        <div id="excludeLeagues"></div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
 </html>
