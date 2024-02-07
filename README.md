@@ -14,24 +14,23 @@ The extension periodically checks for new matches every five minutes and automat
 # Popup Options
 
 ### Window State
-Customize the state of the popup window in the Chrome extension. Choose between "normal", "minimized", or "maximized".
+- Customize the state of the popup window in the Chrome extension. Choose between "normal", "minimized", or "maximized".
+
 <img width="269" alt="image" src="https://github.com/DeepDeepDeep/LoLEsportsWatcher/assets/54153890/e371d034-d406-4f90-9a86-93d7b67d419e">
 
 
 ### Exclude Leagues
-Exclude specific leagues from being opened. 
-<img width="288" alt="image" src="https://github.com/DeepDeepDeep/LoLEsportsWatcher/assets/54153890/e073b098-8e2d-44c2-9fad-2bb8f5174e07">
+- Exclude specific leagues from being opened.
+
+<img width="250" alt="image" src="https://github.com/DeepDeepDeep/LoLEsportsWatcher/assets/54153890/e073b098-8e2d-44c2-9fad-2bb8f5174e07">
 
 ### Choose Provider
-<img width="276" alt="image" src="https://github.com/DeepDeepDeep/LoLEsportsWatcher/assets/54153890/60637e98-6101-4e85-bc7d-fec96bfc3863">
+- Choose between Twitch and YouTube. If a YouTube stream is unavailable, it will automatically switch to Twitch.
 
-#### `--autoplay-policy=no-user-gesture-required` is required for Youtube streams to automatically play.
+<img width="271" alt="image" src="https://github.com/DeepDeepDeep/LoLEsportsWatcher/assets/54153890/b76cc6dd-9a10-4630-8b69-6dcecd87321f">
 
-# Chrome Memory Saver 
-If you have the Memory Saver feature enabled, add lolesports.com to the exclusion: 
 
-![image](https://user-images.githubusercontent.com/54153890/235549499-8a3fc579-006d-4006-bde0-4fad08c6b265.png)
-
+#### `--autoplay-policy=no-user-gesture-required` flag is required for Youtube streams to automatically play.
 
 # Contributing 
 Feel free to open a pull request if you can help, I have no clue about javascript or chrome extensions so I made this pretty fast so there might be some bugs and shitty code.
