@@ -146,7 +146,7 @@ const streamURL = async (matchURL, leagueName) => {
 
 	let url;
 	if (provider === PROVIDER_YOUTUBE && youtubeStream) {
-		let streamId = youtubeStream.parameter;
+	let streamId = youtubeStream.parameter;
 		url = replaceURL(matchURL, streamId);
 	} else {
 		url = matchURL;
