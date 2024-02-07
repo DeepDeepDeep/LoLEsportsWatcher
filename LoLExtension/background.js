@@ -164,7 +164,7 @@ async function openWindowForLeague(matchURL, leagueName, matchID, timeNow) {
 
 	const window = await createWindow(url, windowState);
 	leagueWindowMap.set(leagueName, { matchIDs: [matchID], windowID: window.id });
-	console.log(`Opened window for matches in ${leagueName} at ${timeNow} using ${provider}`);
+	console.log(`Opened window for matches in ${leagueName} at ${timeNow}`);
 }
 
 async function checkURL() {
