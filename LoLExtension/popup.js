@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		'TAL',
 		'TCL',
 		'TFT',
-		'TFT Remix Rumble',
+		'TFT Inkborn Fables',
 		'Ultraliga',
 		'VCS',
 		'Volcano League',
