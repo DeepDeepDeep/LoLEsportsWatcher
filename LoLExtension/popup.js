@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		'TAL',
 		'TCL',
 		'TFT',
-		'TFT Inkborn Fables',
+		'TFT Magic n' Mayhem',
 		'Ultraliga',
 		'VCS',
 		'Volcano League',
