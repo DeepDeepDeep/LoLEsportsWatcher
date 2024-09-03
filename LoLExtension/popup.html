@@ -3,44 +3,53 @@
 
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LoL Watcher</title>
     <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --background-color: #2d3436;
+            --text-color: #dfe6e9;
+            --input-bg-color: #636e72;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            width: 300px;
+            padding: 20px;
+            background-color: var(--background-color);
+            width: 320px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #333;
+            color: var(--text-color);
         }
 
         h1 {
-            font-size: 32px;
-            margin: 10px 0;
-            color: #333;
+            font-size: 28px;
+            margin: 0 0 20px;
+            color: var(--primary-color);
             text-align: center;
         }
 
         h2 {
             font-size: 18px;
-            color: #555;
+            color: var(--secondary-color);
             margin: 10px 0;
             text-align: center;
         }
 
         .container {
-            width: 250px;
+            width: 100%;
             margin-bottom: 20px;
         }
 
         .label {
             font-size: 14px;
             margin: 10px 0 5px;
-            color: #777;
+            color: var(--text-color);
             width: 100%;
         }
 
@@ -51,72 +60,74 @@
         }
 
         .button {
-            width: 50px;
-            height: 25px;
-            border-radius: 12.5px;
+            width: 60px;
+            height: 30px;
+            border-radius: 15px;
             border: none;
             cursor: pointer;
-            margin-right: 5px;
+            margin-right: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 12px;
             font-weight: bold;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .button.on {
-            background-color: #27ae60;
-            color: #ffffff;
+            background-color: var(--primary-color);
+            color: var(--text-color);
         }
 
         .button.off {
-            background-color: #e74c3c;
-            color: #ffffff;
+            background-color: #d63031;
+            color: var(--text-color);
         }
 
         .button:hover {
-            background-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .excluded .button {
-            background-color: #e74c3c;
-            color: #ffffff;
-        }
-
-        .included .button {
-            background-color: #27ae60;
-            color: #ffffff;
+        .excluded .button, .included .button {
+            width: 80px;
         }
 
         .select {
             width: 100%;
-            height: 30px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            background-color: #ecf0f1;
-            color: #333;
+            height: 40px;
+            border-radius: 8px;
+            border: none;
+            background-color: var(--input-bg-color);
+            color: var(--text-color);
             font-size: 14px;
-            padding: 0 10px;
+            padding: 0 15px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23dfe6e9" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position-x: calc(100% - 10px);
+            background-position-y: center;
         }
 
         .select:focus {
             outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+            box-shadow: 0 0 0 2px var(--primary-color);
         }
 
         .provider-container,
         .state-container {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: 20px;
+            width: 100%;
         }
 
         .provider-container .select,
         .state-container .select {
-            width: 80%;
             margin-top: 10px;
         }
     </style>
@@ -140,9 +151,7 @@
         </select>
     </div>
     <div class="container">
-        <label class="label">
-            <h2>Leagues</h2>
-        </label>
+        <h2>Leagues</h2>
         <div id="excludeLeagues"></div>
     </div>
     <script src="popup.js"></script>
