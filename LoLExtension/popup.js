@@ -62,8 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	    "CBLOL",
 	    "LCL",
 	    "First Stand",
-	    "LTA Cross-Conference",
-	    "LFL"
+	    "LTA Cross-Conference"
 	];
 
 	chrome.storage.local.get('excludedLeagues', (result) => {
