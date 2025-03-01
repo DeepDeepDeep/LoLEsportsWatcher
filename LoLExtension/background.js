@@ -84,7 +84,7 @@ async function restoreMissingWindows() {
 
 // Function to reopen a window and update leagueWindowMap
 async function reopenLeagueWindow(leagueName, matchIDs) {
-    let matchLeagueURL = leagueList?.[leagueName] || FALLBACK_LEAGUE_URL[leagueName.trim()];
+    let matchLeagueURL = leagueList?.[leagueName] || FALLBACK_LEAGUE_URL[leagueName];
     if (!matchLeagueURL) {
         console.warn(`No valid URL found for league: ${leagueName}`);
         return null;
@@ -135,7 +135,7 @@ const fetchStreams = async (leagueName) => {
 
 	const events = data.data.schedule.events;
 	for (const event of events) {
-		if (event.league.name === leagueName) {
+		if (event.league.name.trim() === leagueName) {
 			try {
 				for (const stream of event.streams) {
 					streams.push(stream);
@@ -161,7 +161,7 @@ async function checkSchedule(data) {
     let leagueWindowMap = await getLeagueWindowMap(); // Get the latest leagueWindowMap
 
     for (const event of events) {
-        const leagueName = event.league.name;
+        const leagueName = event.league.name.trim();
         const matchID = event?.match?.id;
         const timeUntilMatch = new Date(event.startTime) - date;
 
@@ -184,7 +184,7 @@ async function checkSchedule(data) {
                 } else if (!leagueWindowMap[leagueName]) {
                     const { hasStreams } = await fetchStreams(leagueName);
                     if (hasStreams) {
-                        const matchLeagueURL = leagueList[leagueName] || FALLBACK_LEAGUE_URL[leagueName.trim()];
+                        const matchLeagueURL = leagueList[leagueName] || FALLBACK_LEAGUE_URL[leagueName];
                         if (!matchLeagueURL) {
                             console.warn(`No valid URL found for league: ${leagueName}`);
                             continue;
@@ -195,7 +195,7 @@ async function checkSchedule(data) {
 								matchIDs: matchID ? [matchID] : [], 
 								windowID: newWindow.id 
 							};
-							console.log(`Opened a New Window with ID: ${newWindow.id} for ${leagueName.trim()} - MatchID: ${matchID}`);
+							console.log(`Opened a New Window with ID: ${newWindow.id} for ${leagueName} - MatchID: ${matchID}`);
 						}
                     }
                 }
@@ -244,7 +244,7 @@ chrome.windows.onRemoved.addListener(async (windowId) => {
     for (const leagueName in leagueWindowMap) {
         if (leagueWindowMap[leagueName].windowID === windowId) {
             delete leagueWindowMap[leagueName];
-            console.log(`Window with ID: ${windowId} closed by user for ${leagueName.trim()} at ${new Date().toLocaleString()}`);
+            console.log(`Window with ID: ${windowId} closed by user for ${leagueName} at ${new Date().toLocaleString()}`);
             await setLeagueWindowMap(leagueWindowMap); // Save updated map
             break;
         }
@@ -320,7 +320,7 @@ async function openWindowForLeague(matchURL, leagueName, matchID, timeNow) {
 
     const window = await createWindow(url, windowState);
     
-    console.log(`Opened window for ${leagueName.trim()}'s matches - ${timeNow}`);
+    console.log(`Opened window for ${leagueName}'s matches - ${timeNow}`);
     return window; // Return the window object
 }
 
@@ -335,7 +335,7 @@ async function checkURL() {
 
         // If undefined, check fallback lookup
         if (!matchLeagueURL) {
-            matchLeagueURL = FALLBACK_LEAGUE_URL[leagueName.trim()] || null;
+            matchLeagueURL = FALLBACK_LEAGUE_URL[leagueName] || null;
         }
 
         // If still null, log an error and skip this iteration
