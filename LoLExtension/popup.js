@@ -21,6 +21,33 @@ document.addEventListener('DOMContentLoaded', () => {
 		chrome.storage.local.set({ windowState: selectedState });
 	});
 
+	const removePlayerButton = document.getElementById('removePlayerButton');
+
+	// Load the Remove Player toggle state from storage
+	chrome.storage.local.get('removePlayerEnabled', (result) => {
+	    const isEnabled = result.removePlayerEnabled || false;
+	    updateRemovePlayerButton(isEnabled);
+	});
+
+	// Add event listener for the Remove Player button
+	removePlayerButton.addEventListener('click', () => {
+	    chrome.storage.local.get('removePlayerEnabled', (result) => {
+	        const isEnabled = !(result.removePlayerEnabled || false); // Toggle state
+	        chrome.storage.local.set({ removePlayerEnabled: isEnabled });
+	        updateRemovePlayerButton(isEnabled);
+
+	        // Send a unified message
+	        chrome.runtime.sendMessage({ action: "togglePlayerRemoval", enabled: isEnabled });
+	    });
+	});
+
+	function updateRemovePlayerButton(isEnabled) {
+	    removePlayerButton.textContent = isEnabled ? "ON" : "OFF";
+	    removePlayerButton.classList.toggle("on", isEnabled);
+	    removePlayerButton.classList.toggle("off", !isEnabled);
+	}
+
+
 	const leagueNames = [
 	    "LTA North",
 	    "LTA South",
@@ -62,7 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	    "CBLOL",
 	    "LCL",
 	    "First Stand",
-	    "LTA Cross-Conference"
+	    "LTA Cross-Conference",
+		"TFT Esports"
 	];
 
 	chrome.storage.local.get('excludedLeagues', (result) => {
