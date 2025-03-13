@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	    "LCL",
 	    "First Stand",
 	    "LTA Cross-Conference",
-		"TFT Esports"
+	    "TFT"
 	];
 
 	chrome.storage.local.get('excludedLeagues', (result) => {
