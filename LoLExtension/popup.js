@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	    "Hellenic Legends League",
 	    "Arabian League",
 	    "LCK Challengers",
-	    "CBLOL Academy",
+	    "Circuito Desafiante",
 	    "North Regional League",
 	    "South Regional League",
 	    "Worlds",
