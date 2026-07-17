@@ -34,7 +34,13 @@
     {
       "matches": ["https://lolesports.com/*"],
       "js": ["content.js"],
-      "run_at": "document_idle"
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["inject.js"],
+      "matches": ["https://lolesports.com/*"]
     }
   ]
 }

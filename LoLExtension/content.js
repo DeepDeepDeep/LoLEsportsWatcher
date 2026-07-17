@@ -35,7 +35,7 @@ function disconnectObserver() {
 function waitForElement(selector, callback) {
     if (document.querySelector(selector)) { callback(); return; }
     disconnectObserver();
-    const root = document.querySelector('#__next') || document.body;
+    const root = document.querySelector('#__next') || document.body || document.documentElement;
     currentObserver = new MutationObserver((mutations, obs) => {
         if (document.querySelector(selector)) {
             callback();
@@ -79,6 +79,48 @@ function removeListeners() {
     if (urlCheckInterval) { clearInterval(urlCheckInterval); urlCheckInterval = null; }
 }
 
-chrome.storage.local.get("removePlayerEnabled", (data) => {
+chrome.storage.local.get(["removePlayerEnabled", "forceFixEnabled", "debugMode"], (data) => {
     if (data.removePlayerEnabled) enablePlayerRemoval();
+    
+    window.postMessage({ 
+        type: 'LOL_WATCHER_CONFIG', 
+        config: { forceFixEnabled: data.forceFixEnabled ?? true, debugMode: !!data.debugMode } 
+    }, '*');
 });
+
+// Drop Tracking & Webpack/Fetch Interceptors
+const script = document.createElement('script');
+script.src = chrome.runtime.getURL('inject.js');
+document.documentElement.appendChild(script);
+script.remove();
+
+window.addEventListener('message', (event) => {
+    if (event.source === window && event.data?.type === 'LOL_WATCHER_STATUS') {
+        chrome.storage.local.set({ injectStatus: event.data.status });
+        console.log("[LoL Watcher] Inject status:", event.data.status);
+        return;
+    }
+    if (event.source === window && event.data?.type === 'NEW_LOL_DROP') {
+        chrome.storage.local.get({ drops: [] }, (res) => {
+            const drops = res.drops || [];
+            try {
+                const innerPayload = JSON.parse(event.data.drop.payload.payload);
+                const isDuplicate = drops.some(d => {
+                    try {
+                        const existingInner = JSON.parse(d.payload.payload);
+                        return existingInner.id === innerPayload.id;
+                    } catch (e) { return false; }
+                });
+                
+                if (!isDuplicate) {
+                    drops.unshift(event.data.drop);
+                    chrome.storage.local.set({ drops });
+                    console.log("[LoL Watcher] Saved new unique drop to storage.");
+                }
+            } catch (e) {
+                console.error("[LoL Watcher] Failed to parse drop for deduplication:", e);
+            }
+        });
+    }
+});
+

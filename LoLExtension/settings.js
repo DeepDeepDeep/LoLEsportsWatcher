@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const ws = $('windowState');
     const sp = $('streamProvider');
     const rpt = $('removePlayerToggle');
+    const fft = $('forceFixToggle');
     const dt = $('debugToggle');
     const pi = $('pollInterval');
     const piv = $('pollIntervalVal');
@@ -11,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     $('closeLink').addEventListener('click', () => window.close());
 
-    const storage = await chrome.storage.local.get(['apiProvider', 'windowState', 'provider', 'removePlayerEnabled', 'pollInterval', 'debugMode']);
+    const storage = await chrome.storage.local.get(['apiProvider', 'windowState', 'provider', 'removePlayerEnabled', 'forceFixEnabled', 'pollInterval', 'debugMode']);
 
     for (const p of getAllProviders()) {
         const btn = document.createElement('button');
@@ -49,6 +50,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         showStatus(en ? 'Player removal on' : 'Player removal off', true);
     });
 
+    if (fft) {
+        fft.checked = storage.forceFixEnabled ?? true;
+        fft.addEventListener('change', () => {
+            const en = fft.checked;
+            chrome.storage.local.set({ forceFixEnabled: en });
+            showStatus(en ? 'Drops fix enabled' : 'Drops fix disabled', true);
+        });
+    }
+
     dt.checked = storage.debugMode || false;
     dt.addEventListener('change', () => {
         const en = dt.checked;
@@ -79,6 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (changes.windowState) ws.value = changes.windowState.newValue;
             if (changes.provider) sp.value = changes.provider.newValue;
             if (changes.removePlayerEnabled) rpt.checked = changes.removePlayerEnabled.newValue;
+            if (changes.forceFixEnabled && fft) fft.checked = changes.forceFixEnabled.newValue;
             if (changes.debugMode) dt.checked = changes.debugMode.newValue;
             if (changes.pollInterval) {
                 pi.value = changes.pollInterval.newValue;
