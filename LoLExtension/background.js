@@ -1,6 +1,6 @@
 importScripts('helpers.js');
-importScripts('providers/thirdparty.js');
 importScripts('providers/official.js');
+importScripts('providers/thirdparty.js');
 importScripts('leagues/tiers.js');
 
 const MATCH_WINDOW = 900 * 1000;
