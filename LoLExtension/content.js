@@ -7,71 +7,78 @@ chrome.runtime.onMessage.addListener((message) => {
             enablePlayerRemoval();
         } else {
             console.log("Player Removal DISABLED.");
-            disablePlayerRemoval();
+            removeListeners();
         }
     }
 });
 
-// Selectors
-const HOMEPAGE_PLAYER = "#video-player-placeholder";
+const HOMEPAGE_PLAYER_SECTION = 'section[data-tag="media"]';
 const LIVE_PLAYER = "#video-player";
 const REWARDS_BUTTON = '.status-summary[role="button"]';
+const OBSERVER_TIMEOUT = 30000;
 
-function removeElement(selector, logMessage) {
-    const element = document.querySelector(selector);
-    if (element) {
-        element.remove();
-        console.log(logMessage);
+let currentObserver = null;
+let currentObserverTimeout = null;
+let urlCheckInterval = null;
+
+function disconnectObserver() {
+    if (currentObserverTimeout) {
+        clearTimeout(currentObserverTimeout);
+        currentObserverTimeout = null;
     }
-}
-
-function observeAndRemove(selector, logMessage) {
-    const observer = new MutationObserver(() => {
-        if (document.querySelector(selector)) {
-            removeElement(selector, logMessage);
-        }
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-    removeElement(selector, logMessage); // Remove immediately if present
+    if (currentObserver) {
+        currentObserver.disconnect();
+        currentObserver = null;
+    }
 }
 
 function waitForElement(selector, callback) {
-    if (document.querySelector(selector)){
-        callback();
-    }
-    const observer = new MutationObserver((mutations, obs) => {
+    if (document.querySelector(selector)) { callback(); return; }
+    disconnectObserver();
+    const root = document.querySelector('#__next') || document.body;
+    currentObserver = new MutationObserver((mutations, obs) => {
         if (document.querySelector(selector)) {
             callback();
-            obs.disconnect(); // Stop observing once found
+            disconnectObserver();
         }
     });
-
-    observer.observe(document.body, { childList: true, subtree: true });
+    currentObserver.observe(root, { childList: true, subtree: true });
+    currentObserverTimeout = setTimeout(disconnectObserver, OBSERVER_TIMEOUT);
 }
 
-// Enable player removal when toggled on
+function removeHomepagePlayer() {
+    const section = document.querySelector(HOMEPAGE_PLAYER_SECTION);
+    if (section) { section.remove(); console.log("Removed homepage player section"); }
+}
+
+function removeLivePlayer() {
+    const player = document.querySelector(LIVE_PLAYER);
+    if (player) { player.remove(); console.log("Removed live video player"); }
+}
+
 function enablePlayerRemoval() {
-    if (window.location.href.startsWith("https://lolesports.com/live/")) {
-        console.log("On live match page, waiting for Rewards button...");
-        waitForElement(REWARDS_BUTTON, () => {
-            console.log("Rewards button detected, removing live video player...");
-            removeElement(LIVE_PLAYER, "Removed live video player");
-        });
-    } else {
-        console.log("On homepage, removing homepage video player...");
-        observeAndRemove(HOMEPAGE_PLAYER, "Removed homepage video player");
+    disconnectObserver();
+    if (location.href.startsWith("https://lolesports.com/live/")) {
+        waitForElement(REWARDS_BUTTON, removeLivePlayer);
+    } else if (location.href.startsWith("https://lolesports.com")) {
+        waitForElement(HOMEPAGE_PLAYER_SECTION, removeHomepagePlayer);
+    }
+    if (!urlCheckInterval) {
+        let lastUrl = location.href;
+        urlCheckInterval = setInterval(() => {
+            if (location.href !== lastUrl) {
+                lastUrl = location.href;
+                setTimeout(enablePlayerRemoval, 1500);
+            }
+        }, 2000);
     }
 }
 
-// Disable player removal when toggled off (nothing to restore, just stop observers)
-function disablePlayerRemoval() {
-    console.log("Player removal disabled, but elements won't be restored.");
+function removeListeners() {
+    disconnectObserver();
+    if (urlCheckInterval) { clearInterval(urlCheckInterval); urlCheckInterval = null; }
 }
 
-// Apply settings on load
 chrome.storage.local.get("removePlayerEnabled", (data) => {
-    if (data.removePlayerEnabled) {
-        enablePlayerRemoval();
-    }
+    if (data.removePlayerEnabled) enablePlayerRemoval();
 });

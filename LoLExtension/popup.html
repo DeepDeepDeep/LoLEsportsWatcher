@@ -1,161 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <title>LoL Watcher</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            width: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-        }
-
-        h1 {
-            font-size: 32px;
-            margin: 10px 0;
-            color: #333;
-            text-align: center;
-        }
-
-        h2 {
-            font-size: 18px;
-            color: #555;
-            margin: 10px 0;
-            text-align: center;
-        }
-
-        .container {
-            width: 250px;
-            margin-bottom: 20px;
-        }
-
-        .label {
-            font-size: 14px;
-            margin: 10px 0 5px;
-            color: #777;
-            width: 100%;
-        }
-
-        .button-container {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .button {
-            width: 50px;
-            height: 25px;
-            border-radius: 12.5px;
-            border: none;
-            cursor: pointer;
-            margin-right: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .button.on {
-            background-color: #27ae60;
-            color: #ffffff;
-        }
-
-        .button.off {
-            background-color: #e74c3c;
-            color: #ffffff;
-        }
-
-        .button:hover {
-            background-color: #3498db;
-        }
-
-        .excluded .button {
-            background-color: #e74c3c;
-            color: #ffffff;
-        }
-
-        .included .button {
-            background-color: #27ae60;
-            color: #ffffff;
-        }
-
-        .select {
-            width: 100%;
-            height: 30px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            background-color: #ecf0f1;
-            color: #333;
-            font-size: 14px;
-            padding: 0 10px;
-        }
-
-        .select:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
-        }
-
-        .provider-container,
-        .state-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .provider-container .select,
-        .state-container .select {
-            width: 80%;
-            margin-top: 10px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>LoL Watcher</title>
+<link rel="stylesheet" href="assets/css/popup.css">
 </head>
-
 <body>
-    <h1>LoL Watcher</h1>
-    <div class="container state-container">
-        <label class="label" for="state">Window State</label>
-        <select class="select" id="state">
-            <option value="normal">Normal</option>
-            <option value="minimized">Minimized</option>
-            <option value="maximized">Maximized</option>
-        </select>
-    </div>
-    <div class="container provider-container">
-        <label class="label" for="provider">Provider</label>
-        <select class="select" id="provider">
-            <option value="twitch">Twitch</option>
-            <option value="youtube">YouTube</option>
-        </select>
-    </div>
-    <div class="container">
-        <label class="label">
-            <h2>Leagues</h2>
-        </label>
-        <div id="excludeLeagues"></div>
-    </div>
-    <div class="container">
-        <label class="label">
-            <h2>Player</h2>
-        </label>
-        <div class="button-container">
-            <label class="label">Remove Player</label>
-            <button id="removePlayerButton" class="button off">OFF</button>
-        </div>
-        
-    </div>
-    <script src="popup.js"></script>
-</body>
 
+<!-- Header -->
+<div class="header">
+  <img src="assets/icons/icon.svg" alt="Logo" class="logo">
+  <h1>LoL Watcher</h1>
+  <button class="btn" id="settingsBtn" title="Advanced Settings">
+    <svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+  </button>
+  <button class="btn" id="refreshBtn" title="Refresh now">
+    <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+  </button>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab active" data-tab="leagues">
+    <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    Leagues <span class="badge" id="liveBadge" style="display:none">0</span>
+  </button>
+  <button class="tab" data-tab="settings">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Settings
+  </button>
+  <button class="tab" data-tab="stats">
+    <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Stats
+  </button>
+  <button class="tab" data-tab="about" style="margin-left:auto">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+  </button>
+</div>
+
+<!-- Leagues Panel -->
+<div class="panel active" id="panelLeagues">
+  <div class="scroll" id="leagueList"></div>
+</div>
+
+<!-- Settings Panel -->
+<div class="panel" id="panelSettings">
+  <div class="s-body">
+    <div class="card">
+      <h3>API Data Source</h3>
+      <div class="row">
+        <div><div class="sl">Provider</div><div class="sh">Source for match data</div></div>
+        <div class="tg" id="apiProviderToggle"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Polling</h3>
+      <div class="row">
+        <div><div class="sl">Check interval</div><div class="sh">How often to fetch schedule</div></div>
+        <div class="rr"><input type="range" id="pollInterval" min="1" max="15" step="1"><span class="rv" id="pollIntervalVal">3m</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Window</h3>
+      <div class="row">
+        <div><div class="sl">Default state</div><div class="sh">How new windows open</div></div>
+        <select id="windowState"><option value="normal">Normal</option><option value="minimized">Minimized</option><option value="maximized">Maximized</option></select>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Streaming</h3>
+      <div class="row">
+        <div><div class="sl">Preferred platform</div><div class="sh">Twitch or YouTube first</div></div>
+        <select id="streamProvider"><option value="twitch">Twitch</option><option value="youtube">YouTube</option></select>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Page</h3>
+      <div class="row">
+        <div><div class="sl">Remove video player</div><div class="sh">Hides player on lolesports.com</div></div>
+        <label class="ts"><input type="checkbox" id="removePlayerToggle"><span class="tsl"></span></label>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Developer</h3>
+      <div class="row">
+        <div><div class="sl">Debug logging</div><div class="sh">Detailed logs in service worker console</div></div>
+        <label class="ts"><input type="checkbox" id="debugToggle"><span class="tsl"></span></label>
+      </div>
+    </div>
+    <div class="s-st" id="settingsStatus"></div>
+  </div>
+</div>
+
+<!-- Stats Panel -->
+<div class="panel" id="panelStats">
+  <div class="scroll">
+    <div class="st-grid" id="statsGrid"></div>
+  </div>
+</div>
+
+<!-- About Panel -->
+<div class="panel" id="panelAbout">
+  <div class="scroll" style="padding:20px 22px;display:flex;flex-direction:column;gap:16px">
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:16px">
+      <p style="font-size:13px;color:#b0b0b0;line-height:1.7">
+        Automatically opens live League of Legends matches from lolesports.com in a new window so you never miss a game. Covers every major region and tournament tier.
+      </p>
+    </div>
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:16px">
+      <div style="font-size:10px;color:#777;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Source</div>
+      <a href="https://github.com/DeepDeepDeep/LoLEsportsWatcher" target="_blank" style="font-size:12px;color:#64b5f6;text-decoration:none">github.com/DeepDeepDeep/LoLEsportsWatcher</a>
+    </div>
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:16px">
+      <div style="font-size:10px;color:#777;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Credits</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:12px;color:#ccc">Anudeep &bull; <a href="https://github.com/DeepDeepDeep" target="_blank" style="color:#64b5f6;text-decoration:none">github.com/DeepDeepDeep</a></div>
+        <div style="font-size:12px;color:#ccc">Reformed Doge &bull; <a href="https://github.com/ReformedDoge" target="_blank" style="color:#64b5f6;text-decoration:none">github.com/ReformedDoge</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="leagues/tiers.js"></script>
+<script src="popup.js"></script>
+</body>
 </html>

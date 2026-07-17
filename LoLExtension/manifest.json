@@ -1,10 +1,14 @@
 {
   "manifest_version": 3,
   "name": "LoL Stream Opener",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "description": "Automatically opens games on lolesports.com in a new window.",
   "background": {
     "service_worker": "background.js"
+  },
+  "options_ui": {
+    "page": "settings.html",
+    "open_in_tab": true
   },
   "permissions": [
     "tabs",
@@ -14,14 +18,21 @@
   ],
   "host_permissions": [
     "https://leaguewatcher.onrender.com/*",
+    "https://esports-api.lolesports.com/*",
     "https://lolesports.com/*"
   ],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": "assets/icons/icon128.png"
+  },
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
   },
   "content_scripts": [
     {
-      "matches": ["https://lolesports.com/live/*", "https://lolesports.com/en-US/*"],
+      "matches": ["https://lolesports.com/*"],
       "js": ["content.js"],
       "run_at": "document_idle"
     }

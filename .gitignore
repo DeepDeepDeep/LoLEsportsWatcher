@@ -1,0 +1,5 @@
+# Ignore everything at root level except the plugin directory, README, and LICENSE
+/*
+!/LoLExtension
+!/LICENSE
+!/README.md

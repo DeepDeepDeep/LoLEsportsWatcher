@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Hextech Dark Background -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#091428" />
+      <stop offset="100%" stop-color="#010A13" />
+    </linearGradient>
+    
+    <!-- League Gold Gradient (High Contrast) -->
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCEBA6" />
+      <stop offset="30%" stop-color="#C89B3C" />
+      <stop offset="70%" stop-color="#9C7321" />
+      <stop offset="100%" stop-color="#5A4010" />
+    </linearGradient>
+
+    <!-- Hextech Magic Glow (Brighter for small sizes) -->
+    <radialGradient id="cyanGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0AC8B9" stop-opacity="1" />
+      <stop offset="50%" stop-color="#0397AB" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#005A82" stop-opacity="0" />
+    </radialGradient>
+
+    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.9"/>
+    </filter>
+  </defs>
+  
+  <!-- MASSIVE Watcher Eye Shape (Fills almost the whole canvas) -->
+  <!-- Min X: 12, Max X: 116, Min Y: 18, Max Y: 110 -->
+  <path d="M 12 64 C 12 64, 40 16, 64 16 C 88 16, 116 64, 116 64 C 116 64, 88 112, 64 112 C 40 112, 12 64, 12 64 Z" 
+        fill="url(#bg)" 
+        stroke="url(#gold)" 
+        stroke-width="12" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        filter="url(#dropShadow)"/>
+        
+  <!-- MASSIVE Glowing Iris -->
+  <circle cx="64" cy="64" r="38" fill="url(#cyanGlow)" />
+  
+  <!-- Pupil -->
+  <circle cx="64" cy="64" r="14" fill="#010A13" />
+
+  <!-- MASSIVE Golden League "L" -->
+  <!-- Scaled up significantly, thickened, and given a dark outline so it pops perfectly at 16x16 -->
+  <path d="M 56 20 L 56 68 L 98 68 L 108 88 L 28 88 L 28 40 L 12 54 L 30 20 L 56 20 Z" 
+        fill="url(#gold)" 
+        stroke="#010A13"
+        stroke-width="3"
+        stroke-linejoin="round"
+        filter="url(#dropShadow)"/>
+        
+  <!-- Inner highlight to make the gold look 3D -->
+  <path d="M 51 25 L 51 73 L 93 73 L 99 83 L 33 83 L 33 42 Z" 
+        fill="none" 
+        stroke="#FCEBA6" 
+        stroke-width="2" 
+        opacity="0.7"/>
+</svg>

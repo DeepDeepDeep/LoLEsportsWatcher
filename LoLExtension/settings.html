@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LoL Watcher - Settings</title>
+<link rel="stylesheet" href="assets/css/settings.css">
+</head>
+<body>
+<div class="header">
+  <div class="brand">
+    <img src="assets/icons/icon.svg" alt="Logo" class="logo">
+    <h1>LoL Watcher Settings</h1>
+  </div>
+  <span class="sub" id="closeLink">&larr; Close</span>
+</div>
+<div class="content">
+  <div class="card">
+    <h2>API Data Source</h2>
+    <div class="row">
+      <div><div class="label">Provider</div><div class="hint">Source for league and match data</div></div>
+      <div class="tog-group" id="apiProviderToggle"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Polling</h2>
+    <div class="row">
+      <div><div class="label">Check interval</div><div class="hint">How often to fetch the schedule</div></div>
+      <div class="range-row">
+        <input type="range" id="pollInterval" min="1" max="15" step="1">
+        <span class="range-val" id="pollIntervalVal">3m</span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Window</h2>
+    <div class="row">
+      <div><div class="label">Default state</div><div class="hint">How new windows open</div></div>
+      <select id="windowState">
+        <option value="normal">Normal</option>
+        <option value="minimized">Minimized</option>
+        <option value="maximized">Maximized</option>
+      </select>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Streaming</h2>
+    <div class="row">
+      <div><div class="label">Preferred platform</div><div class="hint">Twitch or YouTube first</div></div>
+      <select id="streamProvider">
+        <option value="twitch">Twitch</option>
+        <option value="youtube">YouTube</option>
+      </select>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Page</h2>
+    <div class="row">
+      <div><div class="label">Remove video player</div><div class="hint">Hides player on lolesports.com</div></div>
+      <label class="tog-switch"><input type="checkbox" id="removePlayerToggle"><span class="tog-slider"></span></label>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Developer</h2>
+    <div class="row">
+      <div><div class="label">Debug logging</div><div class="hint">Detailed logs in service worker console</div></div>
+      <label class="tog-switch"><input type="checkbox" id="debugToggle"><span class="tog-slider"></span></label>
+    </div>
+  </div>
+  <div class="status" id="statusMsg"></div>
+</div>
+<script src="helpers.js"></script>
+<script src="providers/thirdparty.js"></script>
+<script src="providers/official.js"></script>
+<script src="settings.js"></script>
+</body>
+</html>
