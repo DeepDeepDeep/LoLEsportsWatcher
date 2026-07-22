@@ -154,7 +154,7 @@ window.addEventListener('message', (event) => {
                 });
                 
                 if (!isDuplicate) {
-                    drops.unshift(event.data.drop);
+                    drops.unshift({ ...event.data.drop, seen: false });
                     chrome.storage.local.set({ drops });
                     console.log("[LoL Watcher] Saved new unique drop to storage.");
                 }
