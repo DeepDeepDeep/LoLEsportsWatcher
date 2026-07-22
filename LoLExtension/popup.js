@@ -279,16 +279,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  let _seenSaving = false;
+
   async function refreshDrops() {
-    const res = await getFromStorage('drops', []);
-    if (res.length > 0) {
-      dropsBadge.style.display = 'inline';
-      dropsBadge.textContent = res.length;
-    } else {
-      dropsBadge.style.display = 'none';
+    if (_seenSaving) return;
+    let res = await getFromStorage('drops', []);
+    const unread = res.filter(d => !d.seen).length;
+    const isActive = panels.drops.classList.contains('active');
+
+    if (!isActive) {
+      if (unread > 0) { dropsBadge.style.display = 'inline'; dropsBadge.textContent = unread; }
+      else { dropsBadge.style.display = 'none'; }
+      return;
     }
 
-    if (!panels.drops.classList.contains('active')) return;
+    if (unread > 0) {
+      _seenSaving = true;
+      res = res.map(d => ({ ...d, seen: true }));
+      await chrome.storage.local.set({ drops: res });
+      _seenSaving = false;
+    }
+    dropsBadge.style.display = 'none';
 
     if (res.length === 0) {
       dropsListEl.innerHTML = '<div style="text-align:center;color:#666;font-size:12px;padding:20px;">No drops caught yet. Watch some games!</div>';
