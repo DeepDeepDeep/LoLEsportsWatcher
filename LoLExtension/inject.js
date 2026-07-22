@@ -7,6 +7,14 @@
             window._lolWatcher.forceFixEnabled = e.data.config.forceFixEnabled;
             window._lolWatcher.debugMode = !!e.data.config.debugMode;
         }
+        if (e.data?.type === 'LOL_WATCHER_FETCH_DETAILS' && e.data.dropId) {
+            fetch("https://account.service.lolesports.com/fandom-account/v1/earnedDrops/" + e.data.dropId + "?locale=en_GB", {
+                credentials: 'include',
+                headers: { 'Authorization': 'Cookie __Secure-access_token', 'Content-Type': 'application/json' }
+            }).then(function(r) { return r.ok ? r.json() : null; }).then(function(details) {
+                if (details) window.postMessage({ type: 'LOL_DROP_DETAILS', dropId: e.data.dropId, details }, '*');
+            }).catch(function(){});
+        }
     });
 
     window.__LOL_WATCHER_EXTENSION_ACTIVE__ = true;
@@ -38,6 +46,20 @@
                             ...msg
                         };
                         window.postMessage({ type: 'NEW_LOL_DROP', drop: dropData }, '*');
+                        try {
+                            const inner = JSON.parse(msg.payload.payload);
+                            const dropId = inner.message?.i;
+                            if (dropId) {
+                                (function(id) {
+                                    fetch("https://account.service.lolesports.com/fandom-account/v1/earnedDrops/" + id + "?locale=en_GB", {
+                                        credentials: 'include',
+                                        headers: { 'Authorization': 'Cookie __Secure-access_token', 'Content-Type': 'application/json' }
+                                    }).then(r => r.ok ? r.json() : null).then(details => {
+                                        if (details) window.postMessage({ type: 'LOL_DROP_DETAILS', dropId: id, details }, '*');
+                                    }).catch(function(){});
+                                })(dropId);
+                            }
+                        } catch (e) {}
                     }
                 } catch (e) {}
             });

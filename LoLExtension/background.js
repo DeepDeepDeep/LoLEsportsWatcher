@@ -10,6 +10,7 @@ const PROVIDER_YOUTUBE = 'youtube';
 let leagueList = null;
 let lastScheduleData = null;
 
+initStats();
 initDebugMode();
 
 async function getLeagueWindowMap() {
@@ -100,6 +101,7 @@ const fetchSchedule = async () => {
     debugLog(`fetchSchedule: provider=${provider.id}`);
     const data = await provider.getSchedule();
     stats.lastPollTime = new Date().toISOString();
+    chrome.storage.session.set({ requestStats: stats }).catch(() => {});
     lastScheduleData = data;
 
     if (data?.data?.schedule?.events) {
@@ -318,6 +320,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 
     if (message.action === "getStats") {
+        (async () => {
+        if (!stats) await initStats();
         const allLeagueNames = getAllLeagueNames();
         const providerLeagues = leagueList ? Object.keys(leagueList) : [];
         const mergedSet = new Set([...allLeagueNames, ...providerLeagues]);
@@ -347,6 +351,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 allLeagueNames: mergedNames
             });
         });
+        })();
         return true;
     }
 

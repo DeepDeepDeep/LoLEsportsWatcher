@@ -94,13 +94,54 @@ script.src = chrome.runtime.getURL('inject.js');
 document.documentElement.appendChild(script);
 script.remove();
 
+// Retroactively enrich drops missing details (triggered via message from popup)
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === 'enrich-drops') {
+        chrome.storage.local.get({ drops: [] }, async (res) => {
+            const drops = res.drops || [];
+            let count = 0;
+            for (let i = 0; i < drops.length; i++) {
+                if (drops[i].details) continue;
+                try {
+                    const inner = JSON.parse(drops[i].payload.payload);
+                    const dropId = inner.message?.i;
+                    if (!dropId) continue;
+                    window.postMessage({ type: 'LOL_WATCHER_FETCH_DETAILS', dropId }, '*');
+                    count++;
+                } catch (e) {}
+            }
+            console.log("[LoL Watcher] Requested enrichment for", count, "drops.");
+            sendResponse({ requested: count });
+        });
+        return true;
+    }
+});
+
 window.addEventListener('message', (event) => {
-    if (event.source === window && event.data?.type === 'LOL_WATCHER_STATUS') {
+    if (event.source !== window) return;
+
+    if (event.data?.type === 'LOL_WATCHER_STATUS') {
         chrome.storage.local.set({ injectStatus: event.data.status });
         console.log("[LoL Watcher] Inject status:", event.data.status);
         return;
     }
-    if (event.source === window && event.data?.type === 'NEW_LOL_DROP') {
+
+    if (event.data?.type === 'LOL_DROP_DETAILS') {
+        chrome.storage.local.get({ drops: [] }, (res) => {
+            const updated = (res.drops || []).map(d => {
+                try {
+                    const inner = JSON.parse(d.payload.payload);
+                    if (inner.message?.i === event.data.dropId) return { ...d, details: event.data.details };
+                } catch (e) {}
+                return d;
+            });
+            chrome.storage.local.set({ drops: updated });
+            console.log("[LoL Watcher] Drop enriched with details via page fetch.");
+        });
+        return;
+    }
+
+    if (event.data?.type === 'NEW_LOL_DROP') {
         chrome.storage.local.get({ drops: [] }, (res) => {
             const drops = res.drops || [];
             try {

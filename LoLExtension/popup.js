@@ -16,7 +16,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
     Object.entries(panels).forEach(([k, p]) => p.classList.toggle('active', k === name));
     if (name === 'stats') refreshStats();
-    if (name === 'drops') refreshDrops();
+    if (name === 'drops') {
+        refreshDrops();
+        chrome.tabs.query({ url: 'https://lolesports.com/*' }, tabs => {
+            if (tabs.length) chrome.tabs.sendMessage(tabs[0].id, { action: 'enrich-drops' });
+        });
+    }
   }
   tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
 
@@ -240,7 +245,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const id = `jv-${depth}-${Math.random().toString(36).slice(2, 6)}`;
       const items = obj.map((v, i) => {
         const rendered = renderJsonTree(v, null, depth + 1);
-        return `<div class="jv-line" style="padding-left:${(depth + 1) * 16}px"><span class="jv-idx">${i}</span>: ${rendered}</div>`;
+        return `<div class="jv-line" style="padding-left:${(depth + 1) * 8}px"><span class="jv-idx">${i}</span>: ${rendered}</div>`;
       }).join('');
       return `<span class="jv-toggle" data-target="${id}">▼</span><span class="jv-bracket">[</span><span class="jv-count">${obj.length}</span><span class="jv-bracket">]</span><div class="jv-children" id="${id}">${items}</div>`;
     }
@@ -250,7 +255,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const id = `jv-${depth}-${Math.random().toString(36).slice(2, 6)}`;
       const items = keys.map(k => {
         const rendered = renderJsonTree(obj[k], k, depth + 1);
-        return `<div class="jv-line" style="padding-left:${(depth + 1) * 16}px"><span class="jv-key">"${escapeHtml(k)}"</span>: ${rendered}</div>`;
+        return `<div class="jv-line" style="padding-left:${(depth + 1) * 8}px"><span class="jv-key">"${escapeHtml(k)}"</span>: ${rendered}</div>`;
       }).join('');
       return `<span class="jv-toggle" data-target="${id}">▼</span><span class="jv-bracket">{</span><span class="jv-count">${keys.length}</span><span class="jv-bracket">}</span><div class="jv-children" id="${id}">${items}</div>`;
     }
@@ -338,8 +343,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         let payloadObj = {};
         try { payloadObj = JSON.parse(drop.payload.payload); } catch(e){}
 
-        const sponsorImg = payloadObj.message?.s || '';
-        const itemImg = payloadObj.message?.p || '';
+        const det = drop.details;
+        const inv = det?.inventory?.[0];
+        const item = inv?.localizedInventory?.inventory;
+        const title = inv?.localizedInventory?.title?.en_US || item?.internalTitle || 'Esports Reward';
+        const desc = inv?.localizedInventory?.description?.en_US || det?.dropsetDescription || '';
+        const itemImg = item?.imageUrl || payloadObj.message?.p || '';
+        const sponsorImg = det?.sponsorImages?.notificationUrl || payloadObj.message?.s || '';
         const rawColors = payloadObj.message?.c || [];
         const brightColor = getBrightColor(rawColors);
         const gradientStart = rawColors[0] || '#111111';
@@ -360,6 +370,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               ${sponsorImg ? `<img src="${sponsorImg}" class="sponsor-logo">` : ''}
               <span>${leagueName} Drop</span>
             </div>
+            ${det?.sponsor && !sponsorImg ? `<span style="font-size:10px;color:#888;margin-top:2px;">${det.sponsor}</span>` : ''}
           </div>
           <div class="drop-time">${timeStr}</div>
         `;
@@ -372,8 +383,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="drop-content">
             ${itemImg ? `<img class="reward-img" src="${itemImg}">` : `<div class="reward-img" style="background:#222;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;">🎁</div>`}
             <div class="reward-details">
-              <div class="reward-name" style="color:${brightColor}; text-shadow: 0 1px 3px rgba(0,0,0,0.8);">Esports Reward</div>
-              <div style="font-size:11px; color:#ccc;">ID: ${payloadObj.id ? payloadObj.id.split('-')[0] : 'Unknown'}</div>
+              <div class="reward-name" style="color:${brightColor}; text-shadow: 0 1px 3px rgba(0,0,0,0.8);">${title}</div>
+              ${desc ? `<div style="font-size:10px;color:#999;margin-top:1px;">${desc}</div>` : ''}
+              ${det?.dropsetTitle ? `<div style="font-size:11px;color:#aaa;margin-top:2px;">${det.dropsetTitle}</div>` : ''}
               <div class="reward-path">${drop.url || 'Unknown Path'}</div>
             </div>
           </div>
